@@ -1,12 +1,10 @@
 import Stripe from 'stripe';
 
-// Test-Route (ignorieren wir später)
 export async function onRequestGet() {
   return new Response("Stripe Datei ist geladen!", { status: 200 });
 }
 
 export async function onRequestPost({ request, env }) {
-  // WICHTIG: API-Version auf den neuesten Stand gebracht (2025-10-29)
   const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: '2025-10-29' });
   const url = new URL(request.url);
 
@@ -27,7 +25,7 @@ export async function onRequestPost({ request, env }) {
       const auction = await env.DB.prepare("SELECT winner_paid FROM auctions WHERE id = ?").bind(auctionId).first();
       
       if (auction?.winner_paid !== 1) {
-        const activeUntil = Math.floor(Date.now() / 1000) + 86400; // 24 Stunden
+        const activeUntil = Math.floor(Date.now() / 1000) + 86400; // 24 Stunden (86400 Sekunden) Werbezeit
         await env.DB.prepare("UPDATE auctions SET status = 'paid', winner_paid = 1, ad_active_until = ? WHERE id = ?").bind(activeUntil, auctionId).run();
       }
     }
@@ -38,21 +36,18 @@ export async function onRequestPost({ request, env }) {
   const { auctionId, amount, email } = await request.json();
   try {
     const session = await stripe.checkout.sessions.create({
-      managed_payments: { enabled: false }, // Fix für den Steuercode-Fehler
-      allow_promotion_codes: true,          // <-- DAS IST DER SCHLÜSSEL GEGEN "This link is incomplete"
+      managed_payments: { enabled: false },
+      allow_promotion_codes: true,
       line_items: [{
         price_data: {
           currency: 'eur',
-          product_data: { 
-            name: `BUY THE INTERNET – Auction #${auctionId}`
-          },
+          product_data: { name: `BUY THE INTERNET – Auction #${auctionId}` },
           unit_amount: amount,
         },
         quantity: 1,
       }],
       mode: 'payment',
       customer_email: email,
-      // Stellen Sie sicher, dass SITE_URL eine absolute URL ist (z.B. https://buy-the-internet.pages.dev)
       success_url: `${env.SITE_URL}/editor.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${env.SITE_URL}/?payment_cancelled=1`,
       metadata: { auctionId: String(auctionId) },
