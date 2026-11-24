@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 
-// Diesen Block kannst du später löschen, er ist nur für unseren Test
+// Dieser Block ist nur für unseren Test, damit wir sehen, ob die Datei lädt
 export async function onRequestGet() {
   return new Response("Stripe Datei ist geladen!", { status: 200 });
 }
@@ -19,12 +19,14 @@ export async function onRequestPost({ request, env }) {
     } catch (err) {
       return new Response(`Webhook Error: ${err.message}`, { status: 400 });
     }
+    
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const auctionId = session.metadata.auctionId;
       const auction = await env.DB.prepare("SELECT winner_paid FROM auctions WHERE id = ?").bind(auctionId).first();
+      
       if (auction?.winner_paid !== 1) {
-        const activeUntil = Math.floor(Date.now() / 1000) + 86400;
+        const activeUntil = Math.floor(Date.now() / 1000) + 86400; // 24 Stunden
         await env.DB.prepare("UPDATE auctions SET status = 'paid', winner_paid = 1, ad_active_until = ? WHERE id = ?").bind(activeUntil, auctionId).run();
       }
     }
@@ -38,7 +40,10 @@ export async function onRequestPost({ request, env }) {
       line_items: [{
         price_data: {
           currency: 'eur',
-          product_data: { name: `BUY THE INTERNET – Auction #${auctionId}` },
+          product_data: { 
+            name: `BUY THE INTERNET – Auction #${auctionId}`,
+            tax_code: 'txcd_99999999' // Fix für den Stripe-Steuercode-Fehler
+          },
           unit_amount: amount,
         },
         quantity: 1,
@@ -49,6 +54,7 @@ export async function onRequestPost({ request, env }) {
       cancel_url: `${env.SITE_URL}/?payment_cancelled=1`,
       metadata: { auctionId: String(auctionId) },
     });
+    
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { 'Content-Type': 'application/json' },
     });
