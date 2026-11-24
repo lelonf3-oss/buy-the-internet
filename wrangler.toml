@@ -6,6 +6,3 @@ pages_build_output_dir = "public"
 binding = "DB"
 database_name = "buy-the-internet-db"
 database_id = "HIER-DEINE-D1-UUID-EINTRAGEN"
-
-[triggers]
-crons = ["* * * * *"]
