@@ -11,11 +11,11 @@ export async function onRequestGet({ env }) {
     await env.DB.prepare("UPDATE auctions SET status = 'completed' WHERE id = ?").bind(ad.id).run();
     log.push(`Ad for auction #${ad.id} expired.`);
     
-    // Neue Auktion starten
+    // Neue Auktion starten (12 Stunden = 43200 Sekunden)
     await env.DB.prepare(
       "INSERT INTO auctions (status, start_time, end_time, min_bid, min_increment) VALUES ('active', ?, ?, 100, 100)"
-    ).bind(now, now + 86400).run();
-    log.push("Started new auction.");
+    ).bind(now, now + 43200).run();
+    log.push("Started new 12h auction.");
   }
 
   // 2. Prüfen, ob eine laufende Auktion abgelaufen ist (ohne Bezahlung)
@@ -35,12 +35,12 @@ export async function onRequestGet({ env }) {
         .bind(highestBid.user_id, expiredAuction.id).run();
       log.push(`Auction #${expiredAuction.id} ended. Winner ID: ${highestBid.user_id}`);
     } else {
-      // Keine Gebote -> einfach neue Auktion starten
+      // Keine Gebote -> einfach neue Auktion starten (12 Stunden)
       await env.DB.prepare("UPDATE auctions SET status = 'completed' WHERE id = ?").bind(expiredAuction.id).run();
       await env.DB.prepare(
         "INSERT INTO auctions (status, start_time, end_time, min_bid, min_increment) VALUES ('active', ?, ?, 100, 100)"
-      ).bind(now, now + 86400).run();
-      log.push("No bids. Started new auction.");
+      ).bind(now, now + 43200).run();
+      log.push("No bids. Started new 12h auction.");
     }
   }
 
