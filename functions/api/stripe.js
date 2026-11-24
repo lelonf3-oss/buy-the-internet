@@ -6,7 +6,8 @@ export async function onRequestGet() {
 }
 
 export async function onRequestPost({ request, env }) {
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
+  // WICHTIG: API-Version auf den neuesten Stand gebracht (2025-10-29)
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: '2025-10-29' });
   const url = new URL(request.url);
 
   // 1. WEBHOOK (wird aufgerufen, wenn jemand bezahlt hat)
@@ -38,7 +39,7 @@ export async function onRequestPost({ request, env }) {
   try {
     const session = await stripe.checkout.sessions.create({
       managed_payments: { enabled: false }, // Fix für den Steuercode-Fehler
-      allow_promotion_codes: true,          // Fix für "This link is incomplete"
+      allow_promotion_codes: true,          // <-- DAS IST DER SCHLÜSSEL GEGEN "This link is incomplete"
       line_items: [{
         price_data: {
           currency: 'eur',
@@ -51,6 +52,7 @@ export async function onRequestPost({ request, env }) {
       }],
       mode: 'payment',
       customer_email: email,
+      // Stellen Sie sicher, dass SITE_URL eine absolute URL ist (z.B. https://buy-the-internet.pages.dev)
       success_url: `${env.SITE_URL}/editor.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${env.SITE_URL}/?payment_cancelled=1`,
       metadata: { auctionId: String(auctionId) },
