@@ -3,246 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BUY THE INTERNET — One Ad. One Winner. 24 Hours.</title>
+  <title>BUY THE INTERNET</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #050506; --fg: #f4f4f2; --fg-dim: #8a8a86; --muted: #6b6b66;
-      --line: rgba(255, 255, 255, 0.08); --line-2: rgba(255, 255, 255, 0.14);
-      --accent: #d9ff3d; --accent-ink: #0a0a0a; --accent-glow: rgba(217, 255, 61, 0.35);
-      --panel: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
-      --radius: 22px; --radius-sm: 12px;
-      --font: 'Inter Tight', system-ui, sans-serif; --mono: 'JetBrains Mono', monospace;
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --border: #222222;
+      --text: #ffffff;
+      --muted: #888888;
+      --accent: #ccff00; /* Knalliges Neon-Grün */
+      --accent-text: #000000;
+      --font: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    * { margin: 0; padding: 0; }
-    html, body { background: var(--bg); color: var(--fg); }
-    body { font-family: var(--font); -webkit-font-smoothing: antialiased; line-height: 1.5; min-height: 100vh; overflow-x: hidden; position: relative; }
-    a { color: inherit; }
-    .bg-mesh { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
-    .orb { position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform; animation: float 22s ease-in-out infinite; }
-    .orb-1 { width: 620px; height: 620px; background: #4b6bff; top: -220px; left: -220px; opacity: 0.32; }
-    .orb-2 { width: 520px; height: 520px; background: var(--accent); bottom: -180px; right: -160px; opacity: 0.14; animation-delay: -8s; }
-    .orb-3 { width: 420px; height: 420px; background: #ff3d7f; top: 42%; right: 8%; opacity: 0.10; animation-delay: -15s; }
-    @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(40px, -30px) scale(1.06); } }
-    .grain { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.14; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-    .topbar { max-width: 1240px; margin: 0 auto; padding: 26px 32px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-    .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
-    .brand-mark { font-weight: 900; letter-spacing: -0.04em; font-size: 18px; padding: 6px 11px; border-radius: 9px; background: var(--accent); color: var(--accent-ink); }
-    .brand-divider { width: 1px; height: 18px; background: var(--line-2); }
-    .brand-sub { color: var(--fg-dim); }
-    .topbar-right { display: flex; gap: 22px; align-items: center; }
-    .live-indicator { display: flex; gap: 8px; align-items: center; font-size: 12px; letter-spacing: 0.16em; color: var(--accent); font-weight: 600; }
-    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217, 255, 61, 0.55); } 70% { box-shadow: 0 0 0 10px rgba(217, 255, 61, 0); } 100% { box-shadow: 0 0 0 0 rgba(217, 255, 61, 0); } }
-    .toplink { color: var(--fg-dim); text-decoration: none; transition: color 0.2s; }
-    .toplink:hover { color: var(--fg); }
-    main { max-width: 1240px; margin: 0 auto; padding: 20px 32px 100px; }
-    .hero { padding: 40px 0 60px; }
-    .eyebrow { font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 28px; }
-    .hero-title { font-size: clamp(3.5rem, 13vw, 11rem); line-height: 0.85; letter-spacing: -0.05em; font-weight: 900; display: flex; flex-direction: column; margin-bottom: 28px; }
-    .hero-title .line { display: block; }
-    .dot-accent { color: var(--accent); }
-    .hero-sub { max-width: 560px; color: var(--fg-dim); font-size: clamp(1rem, 1.2vw, 1.12rem); line-height: 1.55; }
-    .live-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 16px; }
-    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 10px; }
-    .panel-primary { grid-row: span 2; }
-    .panel-label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); font-weight: 500; }
-    .panel-value { font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; word-break: break-word; }
-    .panel-value.xl { font-size: clamp(3rem, 7vw, 5.5rem); letter-spacing: -0.045em; }
-    .panel-value.mono { font-family: var(--mono); font-weight: 600; font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
-    .panel.accent { background: linear-gradient(180deg, rgba(217, 255, 61, 0.12), rgba(217, 255, 61, 0.02)); border-color: rgba(217, 255, 61, 0.3); }
-    .panel.accent .panel-value { color: var(--accent); }
-    .panel-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 13px; margin-top: auto; padding-top: 8px; }
-    .muted { color: var(--fg-dim); }
-    .chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: rgba(217, 255, 61, 0.10); color: var(--accent); font-size: 12px; font-weight: 600; }
-    .dot-mini { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-    .bid-panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 36px; margin-bottom: 16px; }
-    .bid-panel-head { margin-bottom: 24px; }
-    .bid-panel-head h2 { font-size: 1.6rem; letter-spacing: -0.02em; font-weight: 700; margin-bottom: 4px; }
-    .bid-panel-head p { color: var(--fg-dim); font-size: 14px; }
-    .bid-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; }
-    .field { display: flex; flex-direction: column; gap: 8px; }
-    .field label { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-dim); font-weight: 500; }
-    .field input { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--line-2); color: var(--fg); padding: 14px 16px; border-radius: var(--radius-sm); font-family: inherit; font-size: 15px; width: 100%; }
-    .field input:focus { outline: none; border-color: var(--accent); }
-    .input-money { position: relative; }
-    .input-money span { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--fg-dim); font-size: 15px; pointer-events: none; }
-    .input-money input { padding-left: 32px; }
-    .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent); color: var(--accent-ink); border: none; padding: 15px 26px; border-radius: var(--radius-sm); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 40px -10px var(--accent-glow); }
-    .feedback { margin-top: 16px; font-size: 14px; min-height: 20px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); -webkit-font-smoothing: antialiased; line-height: 1.4; }
+    
+    /* Layout */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    header { padding: 32px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+    .logo { font-size: 20px; font-weight: 900; letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px; }
+    .logo span { color: var(--accent); }
+    .status { font-family: var(--mono); font-size: 12px; color: var(--accent); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+    /* Hero */
+    .hero { padding: 80px 0; text-align: center; border-bottom: 1px solid var(--border); }
+    h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 24px; }
+    h1 span { display: block; }
+    .subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--muted); max-width: 600px; margin: 0 auto; }
+
+    /* Main Grid */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+    .box { background: var(--bg); padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+    .label { font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+    .value { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+    .value.mono { font-family: var(--mono); font-weight: 600; }
+    .value.accent { color: var(--accent); }
+    
+    /* Bid Form */
+    .bid-section { padding: 48px; border-bottom: 1px solid var(--border); text-align: center; }
+    .bid-form { display: flex; gap: 16px; max-width: 600px; margin: 24px auto 0; }
+    .bid-form input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 20px; color: white; font-family: var(--mono); font-size: 16px; outline: none; transition: border 0.2s; }
+    .bid-form input:focus { border-color: var(--accent); }
+    .bid-form button { background: var(--accent); color: var(--accent-text); border: none; padding: 0 32px; font-weight: 800; font-size: 16px; cursor: pointer; transition: opacity 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
+    .bid-form button:hover { opacity: 0.8; }
+    .feedback { margin-top: 16px; font-size: 14px; font-family: var(--mono); }
+    .feedback.error { color: #ff4444; }
     .feedback.success { color: var(--accent); }
-    .feedback.error { color: #ff6b6b; }
-    .split { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; }
-    .feed-card, .stats-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; }
-    .feed-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .feed-head h3, .stats-card h3 { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--fg-dim); }
-    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pulse 2s infinite; }
-    .bid-list { list-style: none; display: flex; flex-direction: column; }
-    .bid-list li { display: grid; grid-template-columns: 1fr auto auto; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-    .bid-list li:last-child { border-bottom: none; }
-    .bid-list .bidder { color: var(--fg-dim); font-family: var(--mono); font-size: 13px; }
-    .bid-list .amount { font-weight: 700; font-variant-numeric: tabular-nums; }
-    .bid-list .time { color: var(--muted); font-size: 12px; min-width: 64px; text-align: right; }
-    .bid-list .empty { display: block; border-bottom: none; text-align: center; padding: 30px 0; color: var(--fg-dim); }
-    .stat-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-    .stat-row span { color: var(--fg-dim); }
-    .stat-row strong { font-variant-numeric: tabular-nums; font-weight: 700; }
-    .footer { max-width: 1240px; margin: 0 auto; padding: 32px; display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); }
-    .footer-links { display: flex; gap: 24px; }
-    .footer a { color: var(--muted); text-decoration: none; }
-    .reveal { opacity: 0; transform: translateY(24px); animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    @keyframes reveal { to { opacity: 1; transform: none; } }
-    .hero .eyebrow { animation-delay: 0.05s; }
-    .hero .hero-title { animation-delay: 0.15s; }
-    .hero .hero-sub { animation-delay: 0.30s; }
-    .live-grid .panel:nth-child(1) { animation-delay: 0.20s; }
-    .live-grid .panel:nth-child(2) { animation-delay: 0.28s; }
-    .live-grid .panel:nth-child(3) { animation-delay: 0.36s; }
-    .live-grid .panel:nth-child(4) { animation-delay: 0.44s; }
-    .bid-panel { animation-delay: 0.30s; }
-    .feed-card { animation-delay: 0.34s; }
-    .stats-card { animation-delay: 0.42s; }
-    @media (max-width: 900px) {
-      .topbar { padding: 20px; }
-      main { padding: 20px 20px 60px; }
-      .live-grid, .split, .bid-form { grid-template-columns: 1fr; }
-      .panel-primary { grid-row: auto; }
-      .hero-title { line-height: 0.9; }
-      .topbar-right .toplink { display: none; }
-      .footer { flex-direction: column; gap: 12px; padding: 24px 20px; }
+
+    /* Feed */
+    .feed-section { padding: 48px; }
+    .feed-list { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+    .feed-item { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .feed-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .feed-item .email { color: var(--muted); }
+    .feed-item .amount { font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+      .bid-form { flex-direction: column; }
+      .bid-form button { padding: 20px; }
+      .box, .bid-section, .feed-section { padding: 32px 24px; }
     }
   </style>
 </head>
 <body>
-  <div class="bg-mesh" aria-hidden="true">
-    <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
-  </div>
-  <div class="grain" aria-hidden="true"></div>
 
-  <!-- DIESER BEREICH WIRD DURCH DIE WERBUNG ERSETZT -->
-  <div id="auctionView">
-    <header class="topbar">
-      <a href="#" class="brand">
-        <span class="brand-mark">BTI</span><span class="brand-divider"></span><span class="brand-sub">Auction Protocol</span>
-      </a>
-      <nav class="topbar-right">
-        <span class="live-indicator"><span class="dot"></span>LIVE</span>
-        <a href="#bids" class="toplink">Bids</a>
-        <a href="#stats" class="toplink">Signal</a>
-      </nav>
+  <div class="container">
+    <header>
+      <div class="logo">BUY THE INTERNET<span>.</span></div>
+      <div class="status"><div class="status-dot"></div> Live Auction</div>
     </header>
+  </div>
 
-    <main>
-      <section class="hero">
-        <div class="eyebrow reveal">— One ad space · One winner · Twenty‑four hours</div>
-        <h1 class="hero-title reveal">
-          <span class="line">BUY THE</span>
-          <span class="line">INTERNET<span class="dot-accent">.</span></span>
-        </h1>
-        <p class="hero-sub reveal">
-          The highest bidder takes over this entire homepage for a full day —
-          your brand, your design, your links. When the clock hits zero, it's gone.
-        </p>
-      </section>
+  <!-- DIESER BEREICH WIRD BEI GEWINN DURCH WERBUNG ERSETZT -->
+  <div id="auctionView">
+    <div class="hero container">
+      <h1><span>BUY THE</span><span>INTERNET<span style="color: var(--accent)">.</span></span></h1>
+      <p class="subtitle">The highest bidder takes over this entire homepage for a full day. When the clock hits zero, it's gone.</p>
+    </div>
 
-      <section class="live-grid">
-        <div class="panel panel-primary reveal">
-          <div class="panel-label">Current Highest Bid</div>
-          <div class="panel-value xl" id="highestBid">€0.00</div>
-          <div class="panel-foot">
-            <span class="chip"><span class="dot-mini"></span>Active Auction</span>
-            <span class="muted" id="auctionId">#—</span>
-          </div>
+    <div class="container">
+      <div class="grid">
+        <div class="box" style="border-right: 1px solid var(--border);">
+          <div class="label">Current Highest Bid</div>
+          <div class="value accent" id="highestBid">€0.00</div>
+          <div class="label" style="margin-top: 24px;">Highest Bidder</div>
+          <div class="value" id="highestBidder" style="font-size: 1.5rem;">—</div>
         </div>
-        <div class="panel reveal">
-          <div class="panel-label">Highest Bidder</div>
-          <div class="panel-value" id="highestBidder">—</div>
-          <div class="panel-foot muted">Identity revealed after verification</div>
+        <div class="box">
+          <div class="label">Time Remaining</div>
+          <div class="value mono" id="countdown">00:00:00</div>
+          <div class="label" style="margin-top: 24px;">Minimum Next Bid</div>
+          <div class="value" id="nextMinBid" style="font-size: 2rem;">€0.00</div>
         </div>
-        <div class="panel reveal">
-          <div class="panel-label">Time Remaining</div>
-          <div class="panel-value mono" id="countdown">00:00:00</div>
-          <div class="panel-foot muted">Bids in the final 2 min extend the clock</div>
-        </div>
-        <div class="panel accent reveal">
-          <div class="panel-label">Minimum Next Bid</div>
-          <div class="panel-value" id="nextMinBid">€0.00</div>
-          <div class="panel-foot muted">Increment: <span id="increment">—</span></div>
-        </div>
-      </section>
+      </div>
 
-      <section class="bid-panel reveal">
-        <div class="bid-panel-head">
-          <h2>Place your bid</h2>
-          <p>Server‑validated · Timestamped · Final</p>
-        </div>
+      <div class="bid-section">
+        <div class="label">Place your bid</div>
         <form id="bidForm" class="bid-form">
-          <div class="field">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="you@brand.com" autocomplete="email" required>
-          </div>
-          <div class="field">
-            <label for="amount">Your bid (EUR)</label>
-            <div class="input-money">
-              <span>€</span>
-              <input type="number" id="amount" placeholder="0.00" step="0.01" min="0" required>
-            </div>
-          </div>
-          <button type="submit" class="btn-primary">
-            <span>Place Bid</span>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
+          <input type="email" id="email" placeholder="your@email.com" required>
+          <input type="number" id="amount" placeholder="Amount in €" step="0.01" required>
+          <button type="submit">Bid Now</button>
         </form>
         <div id="bidFeedback" class="feedback"></div>
-      </section>
+      </div>
 
-      <section class="split">
-        <div class="feed-card reveal" id="bids">
-          <div class="feed-head">
-            <h3>Live Bid Feed</h3>
-            <span class="pulse-dot"></span>
-          </div>
-          <ul id="bidList" class="bid-list">
-            <li class="empty">No bids yet — be the first.</li>
-          </ul>
+      <div class="feed-section">
+        <div class="label">Live Bid Feed</div>
+        <div class="feed-list" id="bidList">
+          <div class="feed-item"><span class="email">No bids yet</span><span class="amount">—</span></div>
         </div>
-        <div class="stats-card reveal" id="stats">
-          <h3>Signal</h3>
-          <div class="stat-row"><span>Total page views</span><strong id="totalViews">—</strong></div>
-          <div class="stat-row"><span>Views today</span><strong id="todayViews">—</strong></div>
-          <div class="stat-row"><span>Recent winners</span><strong id="winnerCount">0</strong></div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div>© BUY THE INTERNET</div>
-      <div class="footer-links"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Imprint</a></div>
-    </footer>
+      </div>
+    </div>
   </div>
 
   <script>
     const $ = (id) => document.getElementById(id);
-    const eurFmt = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' });
-    const fmt = (cents) => eurFmt.format((cents || 0) / 100);
-    const intFmt = new Intl.NumberFormat('en');
-
-    function maskEmail(e) {
+    const fmt = (cents) => new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format((cents || 0) / 100);
+    const maskEmail = (e) => {
       if (!e || !e.includes('@')) return e || '—';
       const [u, d] = e.split('@');
-      return (u ? u.slice(0, 1) + '***' : '***') + '@' + d;
-    }
-
-    function timeAgo(ts) {
-      const s = Math.floor(Date.now() / 1000) - ts;
-      if (s < 60) return s + 's ago';
-      if (s < 3600) return Math.floor(s / 60) + 'm ago';
-      return Math.floor(s / 3600) + 'h ago';
-    }
+      return (u ? u.slice(0, 2) + '***' : '***') + '@' + d;
+    };
 
     let countdownInterval = null;
     function renderCountdown(endTime) {
@@ -250,7 +138,7 @@
       const el = $('countdown');
       const tick = () => {
         const left = endTime - Math.floor(Date.now() / 1000);
-        if (left <= 0) { el.textContent = '00:00:00'; el.style.color = '#ff6b6b'; return; }
+        if (left <= 0) { el.textContent = '00:00:00'; return; }
         const h = Math.floor(left / 3600);
         const m = Math.floor((left % 3600) / 60);
         const s = left % 60;
@@ -266,55 +154,40 @@
         if (!res.ok) return;
         const data = await res.json();
 
-        // --- HIER IST DER TRICK FÜR DIE WERBUNG ---
+        // WERBUNG ANZEIGEN (Wenn Gewinner bezahlt hat)
         if (data.activeAd) {
           const ad = data.activeAd;
           document.getElementById('auctionView').innerHTML = `
-            <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:2rem; background:${ad.bgUrl ? `url('${ad.bgUrl}') center/cover` : '#050506'}; color:#fff; font-family:'Inter Tight', sans-serif;">
-              <div style="max-width:800px; backdrop-filter:blur(20px); background:rgba(0,0,0,0.6); padding:4rem; border-radius:24px; border:1px solid rgba(255,255,255,0.1);">
-                ${ad.logoUrl ? `<img src="${ad.logoUrl}" style="max-height:80px; margin-bottom:2rem;">` : ''}
-                ${ad.companyName ? `<p style="color:${ad.primaryColor || '#d9ff3d'}; letter-spacing:0.2em; text-transform:uppercase; font-weight:bold; margin-bottom:1rem;">${ad.companyName}</p>` : ''}
-                <h1 style="font-size:clamp(2.5rem, 6vw, 4rem); margin:0 0 1.5rem; line-height:1.1; font-weight: 800;">${ad.headline || 'Welcome'}</h1>
-                <p style="font-size:1.2rem; color:#ccc; margin-bottom:3rem; line-height: 1.6;">${ad.description || ''}</p>
-                ${ad.btnText ? `<a href="${ad.btnUrl || '#'}" style="display:inline-block; padding:1rem 2.5rem; background:${ad.primaryColor || '#d9ff3d'}; color:#000; text-decoration:none; font-weight:800; border-radius:12px; font-size:1.1rem;">${ad.btnText}</a>` : ''}
+            <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; background:${ad.bgUrl ? `url('${ad.bgUrl}') center/cover` : '#000'};">
+              <div style="max-width:800px;">
+                ${ad.logoUrl ? `<img src="${ad.logoUrl}" style="max-height:80px; margin-bottom:32px;">` : ''}
+                ${ad.companyName ? `<p style="color:${ad.primaryColor || '#ccff00'}; letter-spacing:0.1em; text-transform:uppercase; font-weight:bold; margin-bottom:16px;">${ad.companyName}</p>` : ''}
+                <h1 style="font-size:clamp(3rem, 8vw, 5rem); margin:0 0 24px; line-height:1.1; font-weight:900;">${ad.headline || 'Welcome'}</h1>
+                <p style="font-size:1.25rem; color:#aaa; margin-bottom:48px; line-height:1.6;">${ad.description || ''}</p>
+                ${ad.btnText ? `<a href="${ad.btnUrl || '#'}" style="display:inline-block; padding:20px 40px; background:${ad.primaryColor || '#ccff00'}; color:#000; text-decoration:none; font-weight:800; font-size:1.1rem; transition:transform 0.2s;">${ad.btnText}</a>` : ''}
               </div>
             </div>`;
           if (countdownInterval) clearInterval(countdownInterval);
           return;
         }
-        // ------------------------------------------
 
+        // AUKTION ANZEIGEN
         $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : fmt(0);
         $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : '—';
         $('nextMinBid').textContent = fmt(data.nextMinBid);
-        $('increment').textContent = fmt(data.auction.minIncrement);
-        $('auctionId').textContent = '#' + data.auction.id;
         renderCountdown(data.auction.endTime);
 
         const list = $('bidList');
         if (!data.recentBids || data.recentBids.length === 0) {
-          list.innerHTML = '<li class="empty">No bids yet — be the first.</li>';
+          list.innerHTML = '<div class="feed-item"><span class="email">No bids yet</span><span class="amount">—</span></div>';
         } else {
-          list.innerHTML = data.recentBids.map((b, i) => `
-            <li style="animation-delay:${i * 60}ms">
-              <span class="bidder">${maskEmail(b.email)}</span>
+          list.innerHTML = data.recentBids.map(b => `
+            <div class="feed-item">
+              <span class="email">${maskEmail(b.email)}</span>
               <span class="amount">${fmt(b.amount)}</span>
-              <span class="time">${timeAgo(b.created_at)}</span>
-            </li>`).join('');
+            </div>`).join('');
         }
-      } catch (e) {
-        console.error('loadAuction', e);
-      }
-    }
-
-    async function loadStats() {
-      try {
-        const res = await fetch('/api/stats');
-        const data = await res.json();
-        $('totalViews').textContent = intFmt.format(data.totalPageViews || 0);
-        $('todayViews').textContent = intFmt.format(data.todayPageViews || 0);
-        $('winnerCount').textContent = (data.winners || []).length;
-      } catch (e) {}
+      } catch (e) { console.error(e); }
     }
 
     $('bidForm').addEventListener('submit', async (ev) => {
@@ -337,7 +210,7 @@
         });
         const result = await res.json();
         if (result.success) {
-          fb.textContent = 'Bid placed. You are now the highest bidder.';
+          fb.textContent = 'Bid placed successfully!';
           fb.classList.add('success');
           $('bidForm').reset();
           loadAuction();
@@ -352,7 +225,6 @@
     });
 
     loadAuction();
-    loadStats();
     setInterval(loadAuction, 15000);
   </script>
 </body>
