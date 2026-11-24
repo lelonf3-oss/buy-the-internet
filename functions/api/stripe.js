@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 
-// Dieser Block ist nur für unseren Test, damit wir sehen, ob die Datei lädt
+// Test-Route (ignorieren wir später)
 export async function onRequestGet() {
   return new Response("Stripe Datei ist geladen!", { status: 200 });
 }
@@ -33,16 +33,16 @@ export async function onRequestPost({ request, env }) {
     return new Response('OK', { status: 200 });
   }
 
-  // 2. CHECKOUT ERSTELLEN (wird aufgerufen, wenn der Button geklickt wird)
+  // 2. CHECKOUT ERSTELLEN
   const { auctionId, amount, email } = await request.json();
   try {
     const session = await stripe.checkout.sessions.create({
+      managed_payments: { enabled: false }, // DAS BEHEBT DEN STEUERCODE-FEHLER
       line_items: [{
         price_data: {
           currency: 'eur',
           product_data: { 
-            name: `BUY THE INTERNET – Auction #${auctionId}`,
-            tax_code: 'txcd_99999999' // Fix für den Stripe-Steuercode-Fehler
+            name: `BUY THE INTERNET – Auction #${auctionId}`
           },
           unit_amount: amount,
         },
