@@ -5,4 +5,4 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "buy-the-internet-db"
-database_id = "HIER-DEINE-D1-UUID-EINTRAGEN"
+database_id = "5d77fe06-37d4-4217-b3c5-44660d5e1790"
