@@ -35,7 +35,6 @@ export async function onRequestPost({ request, env }) {
   const { auctionId, amount, email } = await request.json();
   try {
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
       line_items: [{
         price_data: {
           currency: 'eur',
