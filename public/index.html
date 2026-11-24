@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BUY THE INTERNET — One Ad. One Winner. 24 Hours.</title>
+  <meta name="description" content="Bid on the entire homepage for 24 hours. Highest bidder takes over.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-mesh" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <a href="/" class="brand">
+      <span class="brand-mark">BTI</span>
+      <span class="brand-divider"></span>
+      <span class="brand-sub">Auction Protocol</span>
+    </a>
+    <nav class="topbar-right">
+      <span class="live-indicator"><span class="dot"></span>LIVE</span>
+      <a href="#bids" class="toplink">Bids</a>
+      <a href="#stats" class="toplink">Signal</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="eyebrow reveal">— One ad space · One winner · Twenty‑four hours</div>
+      <h1 class="hero-title reveal">
+        <span class="line">BUY THE</span>
+        <span class="line">INTERNET<span class="dot-accent">.</span></span>
+      </h1>
+      <p class="hero-sub reveal">
+        The highest bidder takes over this entire homepage for a full day —
+        your brand, your design, your links. When the clock hits zero, it's gone.
+      </p>
+    </section>
+
+    <!-- LIVE GRID -->
+    <section class="live-grid">
+      <div class="panel panel-primary reveal">
+        <div class="panel-label">Current Highest Bid</div>
+        <div class="panel-value xl" id="highestBid">€0.00</div>
+        <div class="panel-foot">
+          <span class="chip"><span class="dot-mini"></span>Active Auction</span>
+          <span class="muted" id="auctionId">#—</span>
+        </div>
+      </div>
+
+      <div class="panel reveal">
+        <div class="panel-label">Highest Bidder</div>
+        <div class="panel-value" id="highestBidder">—</div>
+        <div class="panel-foot muted">Identity revealed after verification</div>
+      </div>
+
+      <div class="panel reveal">
+        <div class="panel-label">Time Remaining</div>
+        <div class="panel-value mono" id="countdown">00:00:00</div>
+        <div class="panel-foot muted">Bids in the final 2 min extend the clock</div>
+      </div>
+
+      <div class="panel accent reveal">
+        <div class="panel-label">Minimum Next Bid</div>
+        <div class="panel-value" id="nextMinBid">€0.00</div>
+        <div class="panel-foot muted">Increment: <span id="increment">—</span></div>
+      </div>
+    </section>
+
+    <!-- BID PANEL -->
+    <section class="bid-panel reveal">
+      <div class="bid-panel-head">
+        <h2>Place your bid</h2>
+        <p>Server‑validated · Timestamped · Final</p>
+      </div>
+      <form id="bidForm" class="bid-form">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@brand.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="amount">Your bid (EUR)</label>
+          <div class="input-money">
+            <span>€</span>
+            <input type="number" id="amount" placeholder="0.00" step="0.01" min="0" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">
+          <span>Place Bid</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"
+              d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+      </form>
+      <div id="bidFeedback" class="feedback" aria-live="polite"></div>
+    </section>
+
+    <!-- FEED + STATS -->
+    <section class="split">
+      <div class="feed-card reveal" id="bids">
+        <div class="feed-head">
+          <h3>Live Bid Feed</h3>
+          <span class="pulse-dot"></span>
+        </div>
+        <ul id="bidList" class="bid-list">
+          <li class="empty">No bids yet — be the first.</li>
+        </ul>
+      </div>
+
+      <div class="stats-card reveal" id="stats">
+        <h3>Signal</h3>
+        <div class="stat-row"><span>Total page views</span><strong id="totalViews">—</strong></div>
+        <div class="stat-row"><span>Views today</span><strong id="todayViews">—</strong></div>
+        <div class="stat-row"><span>Recent winners</span><strong id="winnerCount">0</strong></div>
+        <div class="hall" id="hall">
+          <div class="empty muted">No winners yet — the throne is empty.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div>© BUY THE INTERNET</div>
+    <div class="footer-links">
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/imprint.html">Imprint</a>
+    </div>
+  </footer>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const eurFmt = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' });
+    const intFmt = new Intl.NumberFormat('en');
+    const fmt = (cents) => eurFmt.format((cents || 0) / 100);
+
+    function maskEmail(e) {
+      if (!e || !e.includes('@')) return e || '—';
+      const [u, d] = e.split('@');
+      return (u ? u.slice(0, 1) + '***' : '***') + '@' + d;
+    }
+
+    function timeAgo(ts) {
+      const s = Math.floor(Date.now() / 1000) - ts;
+      if (s < 60) return s + 's ago';
+      if (s < 3600) return Math.floor(s / 60) + 'm ago';
+      return Math.floor(s / 3600) + 'h ago';
+    }
+
+    let countdownInterval = null;
+    let currentEndTime = null;
+
+    function renderCountdown(endTime) {
+      if (currentEndTime === endTime && countdownInterval) return;
+      currentEndTime = endTime;
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      const el = $('countdown');
+      const tick = () => {
+        const left = endTime - Math.floor(Date.now() / 1000);
+        if (left <= 0) {
+          el.textContent = '00:00:00';
+          el.style.color = '#ff6b6b';
+          return;
+        }
+        const h = Math.floor(left / 3600);
+        const m = Math.floor((left % 3600) / 60);
+        const s = left % 60;
+        el.textContent =
+          String(h).padStart(2, '0') + ':' +
+          String(m).padStart(2, '0') + ':' +
+          String(s).padStart(2, '0');
+      };
+      tick();
+      countdownInterval = setInterval(tick, 1000);
+    }
+
+    async function loadAuction() {
+      try {
+        const res = await fetch('/api/auction');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : fmt(0);
+        $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : '—';
+        $('nextMinBid').textContent = fmt(data.nextMinBid);
+        $('increment').textContent = fmt(data.auction.minIncrement);
+        $('auctionId').textContent = '#' + data.auction.id;
+
+        renderCountdown(data.auction.endTime);
+
+        const list = $('bidList');
+        if (!data.recentBids || data.recentBids.length === 0) {
+          list.innerHTML = '<li class="empty">No bids yet — be the first.</li>';
+        } else {
+          list.innerHTML = data.recentBids.map((b, i) => `
+            <li style="animation-delay:${i * 40}ms">
+              <span class="bidder">${maskEmail(b.email)}</span>
+              <span class="amount">${fmt(b.amount)}</span>
+              <span class="time">${timeAgo(b.created_at)}</span>
+            </li>`).join('');
+        }
+      } catch (e) {
+        console.error('loadAuction', e);
+      }
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        $('totalViews').textContent = intFmt.format(data.totalPageViews || 0);
+        $('todayViews').textContent = intFmt.format(data.todayPageViews || 0);
+
+        if (data.winners && data.winners.length) {
+          $('winnerCount').textContent = data.winners.length;
+          $('hall').innerHTML = data.winners.slice(0, 5).map(w => `
+            <div class="hall-item">
+              <span class="muted">${maskEmail(w.winner_email)}</span>
+              <strong>${fmt(w.winning_bid)}</strong>
+            </div>`).join('');
+        }
+      } catch (e) {
+        console.error('loadStats', e);
+      }
+    }
+
+    $('bidForm').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const feedback = $('bidFeedback');
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+
+      const email = $('email').value.trim();
+      const eurAmount = parseFloat($('amount').value);
+
+      if (isNaN(eurAmount) || eurAmount <= 0) {
+        feedback.textContent = 'Enter a valid amount.';
+        feedback.classList.add('error');
+        return;
+      }
+      const cents = Math.round(eurAmount * 100);
+
+      const btn = ev.target.querySelector('button');
+      btn.disabled = true;
+
+      try {
+        const auctionRes = await fetch('/api/auction');
+        const auctionData = await auctionRes.json();
+
+        const res = await fetch('/api/bid', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            auctionId: auctionData.auction.id,
+            amount: cents,
+            email,
+          }),
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          feedback.textContent = 'Bid placed. You are now the highest bidder.';
+          feedback.classList.add('success');
+          $('bidForm').reset();
+          await loadAuction();
+        } else {
+          feedback.textContent = result.error || 'Bid failed.';
+          feedback.classList.add('error');
+        }
+      } catch (e) {
+        feedback.textContent = 'Network error. Try again.';
+        feedback.classList.add('error');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    loadAuction();
+    loadStats();
+    setInterval(loadAuction, 15000);
+    setInterval(loadStats, 30000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – BUY THE INTERNET</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main id="app">
+    <h1>Admin Panel</h1>
+    <p class="tagline">Manage auctions, bids and statistics.</p>
+
+    <section class="stat" style="margin-bottom:2rem;">
+      <span class="label">Active Auction</span>
+      <span id="activeAuction" class="value">–</span>
+    </section>
+
+    <h2>Place a Test Bid</h2>
+    <form id="adminBidForm">
+      <input type="email" id="adminEmail" placeholder="Bidder email" required>
+      <input type="number" id="adminAmount" placeholder="Amount (cents)" required>
+      <button type="submit">Place Bid</button>
+    </form>
+
+    <h2>All Bids (Current Auction)</h2>
+    <ul id="adminBidList"></ul>
+  </main>
+
+  <script>
+    const ADMIN_TOKEN = prompt('Enter admin token:');
+
+    async function loadAdmin() {
+      const res = await fetch('/api/admin', {
+        headers: { 'Authorization': `Bearer ${ADMIN_TOKEN}` },
+      });
+      if (!res.ok) { alert('Unauthorized'); return; }
+      const data = await res.json();
+
+      document.getElementById('activeAuction').textContent =
+        data.auction ? `#${data.auction.id} – ends ${new Date(data.auction.end_time * 1000).toLocaleString()}` : 'None';
+
+      document.getElementById('adminBidList').innerHTML = (data.bids || [])
+        .map(b => `<li>€${(b.amount / 100).toFixed(2)} – ${b.email}</li>`)
+        .join('');
+    }
+
+    document.getElementById('adminBidForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value;
+      const amount = parseInt(document.getElementById('adminAmount').value, 10);
+
+      const auctionRes = await fetch('/api/auction');
+      const auctionData = await auctionRes.json();
+
+      await fetch('/api/bid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ auctionId: auctionData.auction.id, amount, email }),
+      });
+      loadAdmin();
+    });
+
+    loadAdmin();
+  </script>
+</body>
+</html>
