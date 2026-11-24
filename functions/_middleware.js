@@ -2,7 +2,6 @@ export async function onRequest(context) {
   const { request, env, next } = context;
   const response = await next();
 
-  // Seitenaufrufe nur für HTML-Requests zählen
   if (response.headers.get('content-type')?.includes('text/html')) {
     const today = new Date().toISOString().slice(0, 10);
     try {
