@@ -18,30 +18,29 @@ export async function onRequestGet({ env }) {
         "SELECT winner_email, winning_bid, ended_at FROM hall_of_fame ORDER BY ended_at DESC LIMIT 10"
     ).all();
 
-    // HIER IST DER TRICK: Wir addieren einfach 2000 auf die echten Views drauf!
+    // Hier addieren wir die 2000 Fake-Views auf die echten Views drauf
     const fakeStartValue = 2000;
     const realTotal = totalViews?.total || 0;
 
     return json({
-        totalPageViews: realTotal + fakeStartValue, // Gibt z.B. 2005 zurück
+        totalPageViews: realTotal + fakeStartValue, 
         todayPageViews: todayViews?.page_views || 0,
         currentAdActive: currentAd,
         winners: winners.results,
     });
 }
 
-// NEU: Diese Funktion zählt einen neuen Besuch (wird per POST aufgerufen)
+// Diese Funktion zählt neue Besucher (wird per POST aufgerufen)
 export async function onRequestPost({ env }) {
     const today = new Date().toISOString().slice(0, 10);
     try {
-        // Prüfen, ob es für heute schon einen Eintrag gibt
         const existing = await env.DB.prepare("SELECT * FROM stats WHERE date = ?").bind(today).first();
         
         if (existing) {
-            // Wenn ja, zähle +1
+            // Wenn es für heute schon einen Eintrag gibt, zähle +1
             await env.DB.prepare("UPDATE stats SET page_views = page_views + 1 WHERE date = ?").bind(today).run();
         } else {
-            // Wenn nein, erstelle den ersten Eintrag für heute
+            // Wenn es der erste Besuch heute ist, erstelle den Eintrag
             await env.DB.prepare("INSERT INTO stats (date, page_views) VALUES (?, 1)").bind(today).run();
         }
         
