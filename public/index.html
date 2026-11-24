@@ -86,6 +86,13 @@
     <div class="hero container">
       <h1><span>BUY THE</span><span>INTERNET<span style="color: var(--accent)">.</span></span></h1>
       <p class="subtitle">The highest bidder takes over this entire homepage for a full day. When the clock hits zero, it's gone.</p>
+      
+      <!-- NEU: VIEW COUNTER -->
+      <div style="margin-top: 32px; font-family: var(--mono); font-size: 14px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.05em;">
+        <div class="status-dot" style="width: 6px; height: 6px; animation: none;"></div>
+        <span id="viewCounter">2.000</span> Views
+      </div>
+
     </div>
 
     <div class="container">
@@ -146,6 +153,31 @@
       };
       tick();
       countdownInterval = setInterval(tick, 1000);
+    }
+
+    // NEU: Funktion für den View Counter
+    async function updateViewCounter() {
+      try {
+        const hasCounted = sessionStorage.getItem('hasCountedView');
+        let res;
+
+        if (!hasCounted) {
+          // Neuer Besuch in dieser Session: Zähle hoch (POST)
+          res = await fetch('/api/stats', { method: 'POST' });
+          sessionStorage.setItem('hasCountedView', 'true');
+        } else {
+          // Bereits gezählt: Nur abrufen (GET)
+          res = await fetch('/api/stats');
+        }
+
+        if (res.ok) {
+          const data = await res.json();
+          // data.totalPageViews beinhaltet bereits die 2000 Fake-Views aus der stats.js
+          $('viewCounter').textContent = new Intl.NumberFormat('de-DE').format(data.totalPageViews || 2000);
+        }
+      } catch (e) {
+        console.error('Fehler beim Laden der Views:', e);
+      }
     }
 
     async function loadAuction() {
@@ -224,7 +256,11 @@
       } finally { btn.disabled = false; }
     });
 
+    // Beim Laden der Seite ausführen
+    updateViewCounter();
     loadAuction();
+    
+    // Alle 15 Sekunden aktualisieren
     setInterval(loadAuction, 15000);
   </script>
 </body>
