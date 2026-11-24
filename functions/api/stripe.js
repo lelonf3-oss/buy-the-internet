@@ -37,7 +37,8 @@ export async function onRequestPost({ request, env }) {
   const { auctionId, amount, email } = await request.json();
   try {
     const session = await stripe.checkout.sessions.create({
-      managed_payments: { enabled: false }, // DAS BEHEBT DEN STEUERCODE-FEHLER
+      managed_payments: { enabled: false }, // Fix für den Steuercode-Fehler
+      allow_promotion_codes: true,          // Fix für "This link is incomplete"
       line_items: [{
         price_data: {
           currency: 'eur',
