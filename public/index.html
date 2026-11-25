@@ -337,6 +337,67 @@
     .feed-item .message { color: var(--text); font-size: 13px; font-style: italic; }
     .feed-item .amount { font-weight: 600; color: var(--text); }
 
+    /* ========================================== -->
+    <!-- HOW IT WORKS SECTION (Wiederhergestellt) -->
+    <!-- ========================================== */
+    .how-it-works {
+      margin-top: 72px;
+    }
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 32px;
+      max-width: 600px;
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .step-card {
+      background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease;
+    }
+    .step-card:hover { border-color: var(--border-strong); }
+    .step-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+    }
+    .step-number {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .step-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    .step-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
     /* Payment Timer Banner */
     #paymentTimerBanner {
       margin-top: 12px;
@@ -369,8 +430,8 @@
 
     @media (max-width: 768px) {
       .hero { padding: 64px 0 48px; }
-      .grid, .bid-form { grid-template-columns: 1fr; }
-      .box, .bid-section, .feed-section { padding: 30px 24px; }
+      .grid, .bid-form, .steps-grid { grid-template-columns: 1fr; }
+      .box, .bid-section, .feed-section, .step-card { padding: 30px 24px; }
       .bid-form button { width: 100%; }
       h1 { font-size: clamp(3rem, 15vw, 4.75rem); }
       .value { font-size: clamp(3rem, 15vw, 4rem); }
@@ -412,7 +473,6 @@
           <div class="value accent" id="highestBid">€0.00</div>
           <div class="label sub">Highest Bidder</div>
           <div class="value" id="highestBidder" style="font-size: 1.5rem; font-weight: 600;">—</div>
-          <!-- NEU: Nachricht des Höchstbieters -->
           <div id="highestBidderMessage" style="font-size: 13px; color: var(--text); font-style: italic; margin-top: 8px;"></div>
         </div>
         <div class="box">
@@ -527,14 +587,13 @@
       countdownInterval = setInterval(tick, 1000);
     }
 
-    // NEU: Timer für die 30-Minuten-Zahlungsfrist
     function startPaymentTimeout(endedAt) {
       if (paymentTimerInterval) clearInterval(paymentTimerInterval);
       const el = $('paymentTimerBanner');
       
       const tick = () => {
         const now = Math.floor(Date.now() / 1000);
-        const deadline = endedAt + 1800; // 30 Minuten (1800 Sekunden)
+        const deadline = endedAt + 1800; // 30 Minuten
         const left = deadline - now;
         
         if (left <= 0) {
@@ -603,12 +662,10 @@
           $('bidForm').style.display = 'none';
           if (countdownInterval) clearInterval(countdownInterval);
           
-          // Starte den 30-Minuten-Timer für die Zahlung
           if (data.endedAt) startPaymentTimeout(data.endedAt);
           return;
         }
 
-        // Aktive Auktion
         if (paymentTimerInterval) clearInterval(paymentTimerInterval);
         $('paymentBox').style.display = 'none';
         $('bidForm').style.display = 'grid';
