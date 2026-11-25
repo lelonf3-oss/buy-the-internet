@@ -3,148 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BUY THE INTERNET</title>
+  <title>BUY THE INTERNET — Own the Homepage</title>
+  <meta name="description" content="Bid to own the entire homepage for 24 hours. The highest bidder gets full control. A high-stakes auction for the digital age.">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Premium Serif (Playfair Display) + Clean Sans (Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
   
   <style>
-    /* iOS / Apple Style */
     :root {
-      --bg: #000000;
-      --surface: #1c1c1e; /* Apple Dark Gray */
-      --surface-hover: #2c2c2e;
-      --text: #ffffff;
-      --text-muted: #8e8e93;
-      --accent: #ccff00; /* Dein Marken-Grün */
-      --border-radius: 24px;
-      --font-main: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      --bg: #fcfcfc;
+      --card-bg: #ffffff;
+      --text-main: #0a0a0a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --accent: #0f172a; /* Tiefes Marineblau/Schwarz für Buttons */
+      --accent-hover: #1e293b;
+      --gold: #b45309; /* Edler Goldton für den Timer */
+      --font-sans: 'Inter', sans-serif;
+      --font-serif: 'Playfair Display', serif;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body { 
       background-color: var(--bg); 
-      color: var(--text); 
-      font-family: var(--font-main); 
-      -webkit-font-smoothing: antialiased;
-      line-height: 1.4;
+      color: var(--text-main); 
+      font-family: var(--font-sans); 
+      -webkit-font-smoothing: antialiased; 
+      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; width: 100%; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; }
     
-    /* Header */
+    /* HEADER */
     header { 
-      padding: 20px 0; 
+      padding: 24px 0; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
+      border-bottom: 1px solid var(--border);
     }
-    .logo { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.03em; }
-    .logo span { color: var(--accent); }
-    .live-badge { 
-      display: flex; align-items: center; gap: 6px; 
-      background: var(--surface); padding: 6px 12px; border-radius: 99px;
-      font-size: 11px; font-weight: 600; text-transform: uppercase;
+    .logo { font-family: var(--font-serif); font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+    .logo span { font-style: italic; }
+    .nav-links { display: flex; gap: 32px; font-size: 14px; font-weight: 500; color: var(--text-muted); }
+    .nav-links a { text-decoration: none; color: inherit; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text-main); }
+    
+    /* HERO SECTION */
+    .hero { padding: 80px 0 60px; text-align: center; max-width: 800px; margin: 0 auto; }
+    .hero-tag { display: inline-block; padding: 6px 16px; background: #f3f4f6; border-radius: 99px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); margin-bottom: 24px; }
+    .hero h1 { font-family: var(--font-serif); font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 24px; }
+    .hero h1 i { font-style: italic; }
+    .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+    /* AUCTION DASHBOARD (Das Herzstück) */
+    .dashboard-wrapper {
+      max-width: 960px;
+      margin: 0 auto 80px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05);
+      overflow: hidden;
     }
-    .live-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-    /* Hero */
-    .hero { text-align: center; padding: 60px 0 40px; }
-    .hero h1 { 
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3rem, 7vw, 5rem); 
-      font-weight: 700; 
-      line-height: 1.05; 
-      letter-spacing: -0.04em; 
-      margin-bottom: 16px; 
-    }
-    .hero h1 span { color: var(--accent); }
-    .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
-
-    /* View Badge */
-    .view-badge { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; font-size: 13px; color: var(--text-muted); }
-    .view-badge span { color: var(--text); font-weight: 600; }
-
-    /* Main Auction Card */
-    .auction-card {
-      background: var(--surface);
-      border-radius: var(--border-radius);
-      padding: 40px;
+    .dash-top {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border);
     }
-    
-    /* Left Side: Stats */
-    .stat-group { margin-bottom: 32px; }
-    .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .stat-value { font-size: 42px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
-    .stat-value.accent { color: var(--accent); }
-    
-    .timer-box { display: flex; gap: 12px; align-items: baseline; }
-    .timer-val { font-size: 48px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
 
-    /* Right Side: Form */
-    .form-container { display: flex; flex-direction: column; justify-content: center; }
-    .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-    .input-group label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .dash-col { padding: 40px; }
+    .dash-col:first-child { border-right: 1px solid var(--border); }
+
+    .stat-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px; }
+    
+    /* Current Bid */
+    .current-bid { font-family: var(--font-serif); font-size: 64px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+    .bidder-info { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+    
+    /* Timer */
+    .timer-display { font-family: var(--font-sans); font-size: 56px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: var(--gold); font-variant-numeric: tabular-nums; }
+    .timer-label { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
+
+    /* Form Area */
+    .dash-bottom { padding: 40px; background: #fafafa; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: end; }
+    
+    .input-group { display: flex; flex-direction: column; gap: 8px; }
+    .input-group label { font-size: 13px; font-weight: 600; color: var(--text-main); }
     .input-group input { 
-      width: 100%; background: #000; border: 1px solid #333; border-radius: 12px; 
-      padding: 16px; color: #fff; font-size: 16px; outline: none; transition: border 0.2s;
+      width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; 
+      font-family: var(--font-sans); font-size: 16px; outline: none; transition: border-color 0.2s;
     }
-    .input-group input:focus { border-color: var(--accent); }
-    
+    .input-group input:focus { border-color: var(--text-main); }
+
     .btn-primary { 
-      width: 100%; background: var(--accent); color: #000; border: none; border-radius: 12px; 
-      padding: 18px; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.1s;
+      background: var(--accent); color: #fff; border: none; padding: 14px 32px; border-radius: 8px; 
+      font-family: var(--font-sans); font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+      height: 53px;
     }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-primary:disabled { opacity: 0.5; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .feedback { margin-top: 12px; font-size: 14px; font-weight: 500; }
+    .feedback.error { color: #dc2626; }
+    .feedback.success { color: #16a34a; }
 
-    .feedback { margin-top: 12px; font-size: 14px; text-align: center; font-weight: 500; }
-    .feedback.error { color: #ff453a; }
-    .feedback.success { color: var(--accent); }
+    /* Pay Now State */
+    #paymentBox { display: none; text-align: center; padding: 20px; background: #fffbeb; border: 1px solid #fcd34d; border-radius: 12px; margin-top: 16px; }
+    #paymentBox h3 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 8px; }
+    #paymentBox p { color: var(--text-muted); margin-bottom: 16px; }
+    .btn-pay { background: var(--text-main); color: #fff; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 300px; margin: 0 auto; }
 
-    /* Pay Now Box */
-    #paymentBox { display: none; background: rgba(204,255,0,0.1); border: 1px solid var(--accent); border-radius: 16px; padding: 24px; text-align: center; }
-    .btn-pay { width: 100%; background: var(--accent); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 16px; }
+    /* HOW IT WORKS */
+    .how-it-works { padding: 80px 0; border-top: 1px solid var(--border); }
+    .section-title { font-family: var(--font-serif); font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 48px; }
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
+    .step-icon { width: 56px; height: 56px; margin: 0 auto 20px; background: #f3f4f6; border-radius: 16px; display: flex; justify-content: center; align-items: center; }
+    .step-icon svg { width: 24px; height: 24px; stroke: var(--text-main); stroke-width: 2; fill: none; }
+    .step-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+    .step-card p { font-size: 15px; color: var(--text-muted); }
 
-    /* How it works */
-    .how-it-works { padding: 60px 0; border-top: 1px solid #333; }
-    .section-title { font-size: 28px; font-weight: 700; margin-bottom: 32px; letter-spacing: -0.02em; }
-    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .step-card { background: var(--surface); padding: 32px; border-radius: 20px; }
-    .step-icon { width: 40px; height: 40px; background: #000; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: 16px; }
-    .step-card h3 { font-size: 18px; margin-bottom: 8px; }
-    .step-card p { font-size: 14px; color: var(--text-muted); }
+    /* RECENT WINNERS (Nur sichtbar wenn echte Daten da sind) */
+    #winners-section { display: none; padding: 80px 0; background: #fff; border-top: 1px solid var(--border); }
+    .winners-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .winner-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card-bg); }
+    .winner-img { width: 100%; height: 180px; background: #f3f4f6; display: flex; justify-content: center; align-items: center; font-family: var(--font-serif); font-size: 24px; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    .winner-details { padding: 24px; }
+    .winner-details h4 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .winner-details p { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* Recent Winners (Anfangs versteckt) */
-    #winners-section { display: none; padding: 60px 0; border-top: 1px solid #333; }
-    .winners-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .winner-card { background: var(--surface); border-radius: 20px; overflow: hidden; }
-    .winner-img { width: 100%; height: 140px; background: #000; display: flex; justify-content: center; align-items: center; color: #333; font-weight: bold; }
-    .winner-info { padding: 20px; }
-    .winner-info h4 { font-size: 16px; margin-bottom: 4px; }
-    .winner-info p { font-size: 12px; color: var(--text-muted); }
-    .winner-price { font-size: 16px; font-weight: 700; color: var(--accent); margin-top: 8px; display: block; }
-
-    /* Footer */
-    footer { border-top: 1px solid #333; padding: 24px 0; margin-top: auto; }
-    .footer-content { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); }
-    .footer-links { display: flex; gap: 24px; }
-    .footer-links a { color: var(--text-muted); text-decoration: none; }
-    .footer-links a:hover { color: #fff; }
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; margin-top: auto; background: #fff; }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text-main); }
 
     @media (max-width: 768px) {
-      .auction-card { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
+      .nav-links { display: none; }
+      .dash-top { grid-template-columns: 1fr; }
+      .dash-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .form-row { grid-template-columns: 1fr; }
+      .btn-primary { width: 100%; }
       .steps-grid, .winners-grid { grid-template-columns: 1fr; }
       .footer-content { flex-direction: column; gap: 16px; text-align: center; }
+      .current-bid { font-size: 48px; }
+      .timer-display { font-size: 40px; }
     }
   </style>
 </head>
@@ -152,111 +163,118 @@
 
   <div class="container">
     <header>
-      <div class="logo">BUY THE INTERNET<span>.</span></div>
-      <div class="live-badge"><div class="live-dot"></div> Live Auction</div>
+      <div class="logo">Buy The Internet<span>.</span></div>
+      <div class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#winners-section">Past Winners</a>
+      </div>
     </header>
   </div>
 
-  <div id="auctionView">
+  <main id="auctionView">
+    <!-- HERO -->
     <div class="container hero">
-      <h1>One Homepage.<br><span>One Winner.</span></h1>
-      <p>Bid to own the entire homepage for 24 hours. When the clock hits zero, it's gone.</p>
-      
-      <div class="view-badge">
-        <div class="live-dot" style="animation: none;"></div>
-        <span id="viewCounter">2.000</span> Views Today
-      </div>
+      <div class="hero-tag">Live Auction Ending Soon</div>
+      <h1>The ultimate <i>digital</i> billboard.</h1>
+      <p>One homepage. One winner. Every 24 hours. Place the highest bid to take over this entire screen with your brand.</p>
     </div>
 
+    <!-- AUCTION DASHBOARD -->
     <div class="container">
-      <!-- Das Haupt-Auktions-Panel -->
-      <div class="auction-card">
+      <div class="dashboard-wrapper">
         
-        <!-- Links: Stats -->
-        <div>
-          <div class="stat-group">
+        <!-- Top: Stats -->
+        <div class="dash-top">
+          <div class="dash-col">
             <div class="stat-label">Current Highest Bid</div>
-            <div class="stat-value accent" id="highestBid">€0.00</div>
-          </div>
-          <div class="stat-group">
-            <div class="stat-label">Time Remaining</div>
-            <div class="timer-box">
-              <div class="timer-val" id="countdown">00:00:00</div>
+            <div class="current-bid" id="highestBid">€0.00</div>
+            <div class="bidder-info">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span id="highestBidder">No bids yet</span>
             </div>
           </div>
-          <div class="stat-group" style="margin-bottom: 0;">
-            <div class="stat-label">Highest Bidder</div>
-            <div class="stat-value" id="highestBidder" style="font-size: 20px; color: var(--text-muted);">—</div>
+          <div class="dash-col">
+            <div class="stat-label">Time Remaining</div>
+            <div class="timer-display" id="countdown">00:00:00</div>
+            <div class="timer-label">Hours : Minutes : Seconds</div>
           </div>
         </div>
 
-        <!-- Rechts: Form -->
-        <div class="form-container">
+        <!-- Bottom: Form -->
+        <div class="dash-bottom">
           <form id="bidForm">
-            <div class="input-group">
-              <label>Minimum Next Bid: <span id="nextMinBid" style="color:#fff;">€0.00</span></label>
-              <input type="email" id="email" placeholder="Your Email Address" required>
+            <div class="form-row">
+              <div class="input-group">
+                <label>Your Email</label>
+                <input type="email" id="email" placeholder="name@company.com" required>
+              </div>
+              <div class="input-group">
+                <label>Your Bid (Min: <span id="nextMinBid">€0.00</span>)</label>
+                <input type="number" id="amount" placeholder="Enter amount in €" step="0.01" required>
+              </div>
+              <button type="submit" class="btn-primary" id="submitBtn">Place Bid</button>
             </div>
-            <div class="input-group">
-              <label>Your Bid Amount (€)</label>
-              <input type="number" id="amount" placeholder="0.00" step="0.01" required>
-            </div>
-            <button type="submit" class="btn-primary" id="submitBtn">Place Bid</button>
             <div id="bidFeedback" class="feedback"></div>
           </form>
 
+          <!-- Pay Now Box -->
           <div id="paymentBox">
-            <div class="stat-label" style="color: var(--accent);">Auction Ended!</div>
-            <p style="font-size: 14px; margin-bottom: 16px;">You are the highest bidder. Complete your payment to claim the homepage.</p>
-            <button onclick="payNow()" class="btn-pay">Pay Now via Stripe</button>
+            <h3>Auction Ended</h3>
+            <p>You are the winning bidder. Secure your 24-hour takeover now.</p>
+            <button onclick="payNow()" class="btn-pay">Proceed to Payment via Stripe →</button>
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- How it works -->
-    <div class="container how-it-works">
-      <div class="section-title">A simple idea. A huge opportunity.</div>
+    <!-- HOW IT WORKS -->
+    <div class="container how-it-works" id="how-it-works">
+      <h2 class="section-title">A simple process. A massive impact.</h2>
       <div class="steps-grid">
         <div class="step-card">
-          <div class="step-icon">✍️</div>
-          <h3>Place a Bid</h3>
-          <p>Enter your bid for the next 24h takeover.</p>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          </div>
+          <h3>1. Place your bid</h3>
+          <p>Enter your maximum offer. If someone outbids you, you can place a new one.</p>
         </div>
         <div class="step-card">
-          <div class="step-icon">🏆</div>
-          <h3>Win the Auction</h3>
-          <p>The highest bidder gets the homepage.</p>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+          </div>
+          <h3>2. Win the auction</h3>
+          <p>When the timer hits zero, the highest bidder is declared the winner.</p>
         </div>
         <div class="step-card">
-          <div class="step-icon">🎨</div>
-          <h3>Customize & Grow</h3>
-          <p>Add your content and reach thousands.</p>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <h3>3. Go Live</h3>
+          <p>Pay securely via Stripe, upload your design, and your brand takes over for 24 hours.</p>
         </div>
       </div>
     </div>
 
-    <!-- Recent Winners (Wird per JS eingeblendet, wenn echte Daten da sind) -->
+    <!-- RECENT WINNERS (JS controlled) -->
     <div class="container" id="winners-section">
-      <div class="section-title">Recent Winners</div>
+      <h2 class="section-title">Recent Takeovers</h2>
       <div class="winners-grid" id="winners-grid">
-        <!-- Wird dynamisch befüllt -->
+        <!-- JS inserts cards here -->
       </div>
     </div>
-  </div>
+  </main>
 
-  <div class="container">
-    <footer>
-      <div class="footer-content">
-        <div class="logo">BUY THE INTERNET<span>.</span></div>
-        <div class="footer-links">
-          <a href="/impressum.html">Impressum</a>
-          <a href="/datenschutz.html">Datenschutz</a>
-        </div>
+  <footer>
+    <div class="container footer-content">
+      <div class="logo" style="font-size: 20px;">Buy The Internet.</div>
+      <div class="footer-links">
+        <a href="/impressum.html">Impressum</a>
+        <a href="/datenschutz.html">Datenschutz</a>
       </div>
-    </footer>
-  </div>
+      <div>&copy; 2024. All rights reserved.</div>
+    </div>
+  </footer>
 
   <script>
     const $ = (id) => document.getElementById(id);
@@ -295,10 +313,6 @@
         } else {
           res = await fetch('/api/stats');
         }
-        if (res.ok) {
-          const data = await res.json();
-          $('viewCounter').textContent = new Intl.NumberFormat('de-DE').format(data.totalPageViews || 2000);
-        }
       } catch (e) { console.error(e); }
     }
 
@@ -309,24 +323,24 @@
         const data = await res.json();
         currentAuctionData = data;
 
-        // WENN EIN AKTIVES WERBEBILD DA IST
+        // WENN EINE WERBUNG AKTIV IST (Full Screen Takeover)
         if (data.activeAd) {
           const ad = data.activeAd;
-          document.getElementById('auctionView').innerHTML = `
-            <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; background:${ad.bgUrl ? `url('${ad.bgUrl}') center/cover` : '#000'};">
+          document.body.innerHTML = `
+            <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; background:${ad.bgUrl ? `url('${ad.bgUrl}') center/cover` : '#ffffff'}; color: ${ad.bgUrl ? '#fff' : '#000'};">
               <div style="max-width:800px;">
                 ${ad.logoUrl ? `<img src="${ad.logoUrl}" style="max-height:80px; margin-bottom:32px;">` : ''}
-                ${ad.companyName ? `<p style="color:${ad.primaryColor || '#ccff00'}; letter-spacing:0.1em; text-transform:uppercase; font-weight:bold; margin-bottom:16px;">${ad.companyName}</p>` : ''}
-                <h1 style="font-size:clamp(3rem, 8vw, 5rem); margin:0 0 24px; line-height:1.1; font-weight:900;">${ad.headline || 'Welcome'}</h1>
-                <p style="font-size:1.25rem; color:#aaa; margin-bottom:48px; line-height:1.6;">${ad.description || ''}</p>
-                ${ad.btnText ? `<a href="${ad.btnUrl || '#'}" style="display:inline-block; padding:20px 40px; background:${ad.primaryColor || '#ccff00'}; color:#000; text-decoration:none; font-weight:800; font-size:1.1rem; transition:transform 0.2s;">${ad.btnText}</a>` : ''}
+                ${ad.companyName ? `<p style="letter-spacing:0.1em; text-transform:uppercase; font-weight:bold; margin-bottom:16px; color:${ad.primaryColor || '#000'};">${ad.companyName}</p>` : ''}
+                <h1 style="font-family:var(--font-serif); font-size:clamp(3rem, 8vw, 5rem); margin:0 0 24px; line-height:1.1; font-weight:700;">${ad.headline || 'Welcome'}</h1>
+                <p style="font-size:1.25rem; opacity:0.8; margin-bottom:48px; line-height:1.6;">${ad.description || ''}</p>
+                ${ad.btnText ? `<a href="${ad.btnUrl || '#'}" style="display:inline-block; padding:16px 32px; background:${ad.primaryColor || '#000'}; color:${ad.bgUrl ? '#fff' : '#fff'}; text-decoration:none; font-weight:600; font-size:1.1rem; border-radius:8px;">${ad.btnText}</a>` : ''}
               </div>
             </div>`;
           if (countdownInterval) clearInterval(countdownInterval);
           return;
         }
 
-        // WENN AUKTION BEENDET IST
+        // WENN AUKTION BEENDET (Warten auf Zahlung)
         if (data.auctionStatus === 'ended') {
           $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : '—';
           $('highestBidder').textContent = data.winnerEmail ? maskEmail(data.winnerEmail) : '—';
@@ -337,27 +351,26 @@
           return;
         }
 
-        // NORMALE AUKTION
+        // NORMALE AKTIVE AUKTION
         $('paymentBox').style.display = 'none';
         $('bidForm').style.display = 'block';
         $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : fmt(0);
-        $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : '—';
+        $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : 'No bids yet';
         $('nextMinBid').textContent = fmt(data.nextMinBid);
         renderCountdown(data.auction.endTime);
 
-        // RECENT WINNERS LOGIK (Nur anzeigen, wenn echte Daten vorhanden sind)
+        // ECHTE WINNER ANZEIGEN
         if (data.recentWinners && data.recentWinners.length > 0) {
           $('winners-section').style.display = 'block';
           $('winners-grid').innerHTML = data.recentWinners.map(w => `
             <div class="winner-card">
-              <div class="winner-img" style="${w.bgUrl ? `background: url('${w.bgUrl}') center/cover;` : ''}">
+              <div class="winner-img" style="${w.bgUrl ? `background: url('${w.bgUrl}') center/cover; color: transparent;` : ''}">
                 ${!w.bgUrl && w.logoUrl ? `<img src="${w.logoUrl}" style="max-height: 60px;">` : ''}
-                ${!w.bgUrl && !w.logoUrl ? w.companyName || 'Winner' : ''}
+                ${!w.bgUrl && !w.logoUrl ? w.companyName || 'Brand' : ''}
               </div>
-              <div class="winner-info">
+              <div class="winner-details">
                 <h4>${w.companyName || 'Anonymous Brand'}</h4>
-                <p>${w.headline || 'Homepage Takeover'}</p>
-                <span class="winner-price">Winning Bid</span>
+                <p>${w.headline || '24-Hour Takeover'}</p>
               </div>
             </div>
           `).join('');
@@ -389,7 +402,7 @@
       fb.textContent = ''; fb.className = 'feedback';
       const email = $('email').value.trim();
       const eur = parseFloat($('amount').value);
-      if (isNaN(eur) || eur <= 0) { fb.textContent = 'Enter a valid amount.'; fb.classList.add('error'); return; }
+      if (isNaN(eur) || eur <= 0) { fb.textContent = 'Please enter a valid amount.'; fb.classList.add('error'); return; }
 
       const btn = $('submitBtn');
       btn.disabled = true; btn.textContent = 'Processing...';
@@ -403,7 +416,7 @@
         });
         const result = await res.json();
         if (result.success) {
-          fb.textContent = 'Bid placed successfully!';
+          fb.textContent = 'Your bid was placed successfully!';
           fb.classList.add('success');
           $('bidForm').reset();
           loadAuction();
@@ -412,7 +425,7 @@
           fb.classList.add('error');
         }
       } catch (e) {
-        fb.textContent = 'Network error.';
+        fb.textContent = 'Network error. Please try again.';
         fb.classList.add('error');
       } finally { btn.disabled = false; btn.textContent = 'Place Bid'; }
     });
