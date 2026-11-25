@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://buy-the-internet.makertoolhub.com/sitemap.xml
