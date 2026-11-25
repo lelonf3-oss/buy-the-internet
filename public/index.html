@@ -3,278 +3,461 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BUY THE INTERNET — Own the Homepage</title>
-  <meta name="description" content="Bid to own the entire homepage for 24 hours. The highest bidder gets full control. A high-stakes auction for the digital age.">
   
+  <!-- SEO Meta Tags -->
+  <title>BUY THE INTERNET — The Ultimate 24-Hour Homepage Takeover</title>
+  <meta name="description" content="Bid for the chance to take over this entire homepage for a full 24 hours. The highest bidder gets full branding and exposure. Live auction ending soon.">
+  <meta name="keywords" content="auction, buy the internet, homepage takeover, advertising, live auction, bid">
+  <meta name="author" content="Buy The Internet">
+  
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://buy-the-internet.pages.dev/">
+  <meta property="og:title" content="BUY THE INTERNET — 24-Hour Homepage Takeover">
+  <meta property="og:description" content="The highest bidder takes over this entire homepage for a full day. When the clock hits zero, it's gone. Place your bid now.">
+  <meta property="og:image" content="https://buy-the-internet.pages.dev/og-image.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://buy-the-internet.pages.dev/">
+  <meta property="twitter:title" content="BUY THE INTERNET — 24-Hour Homepage Takeover">
+  <meta property="twitter:description" content="The highest bidder takes over this entire homepage for a full day. When the clock hits zero, it's gone.">
+  <meta property="twitter:image" content="https://buy-the-internet.pages.dev/og-image.jpg">
+
+  <!-- Schema.org JSON-LD (Für Google) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "BUY THE INTERNET - Homepage Takeover Auction",
+    "description": "A single public auction for the entire homepage takeover.",
+    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+      "@type": "VirtualLocation",
+      "url": "https://buy-the-internet.pages.dev/"
+    },
+    "organizer": {
+      "@type": "Organization",
+      "name": "Buy The Internet",
+      "url": "https://buy-the-internet.pages.dev/"
+    }
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Premium Serif (Playfair Display) + Clean Sans (Inter) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg: #fcfcfc;
-      --card-bg: #ffffff;
-      --text-main: #0a0a0a;
-      --text-muted: #6b7280;
-      --border: #e5e7eb;
-      --accent: #0f172a; /* Tiefes Marineblau/Schwarz für Buttons */
-      --accent-hover: #1e293b;
-      --gold: #b45309; /* Edler Goldton für den Timer */
-      --font-sans: 'Inter', sans-serif;
-      --font-serif: 'Playfair Display', serif;
+      --bg: #030303;
+      --surface: rgba(255, 255, 255, 0.02);
+      --surface-hover: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #ffffff;
+      --muted: #888888;
+      --accent: #ccff00;
+      --accent-glow: rgba(204, 255, 0, 0.15);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body { 
       background-color: var(--bg); 
-      color: var(--text-main); 
-      font-family: var(--font-sans); 
+      color: var(--text); 
+      font-family: var(--font-body); 
       -webkit-font-smoothing: antialiased; 
-      line-height: 1.6;
+      line-height: 1.5;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Modernes Tech-Grid im Hintergrund */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at 50% 0%, black 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(circle at 50% 0%, black 30%, transparent 80%);
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: -20%; left: 50%; transform: translateX(-50%);
+      width: 100vw; height: 60vh;
+      background: radial-gradient(circle, rgba(204,255,0,0.06) 0%, rgba(5,5,5,0) 60%);
+      z-index: -1;
+      pointer-events: none;
     }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; }
     
-    /* HEADER */
     header { 
       padding: 24px 0; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); 
     }
-    .logo { font-family: var(--font-serif); font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
-    .logo span { font-style: italic; }
-    .nav-links { display: flex; gap: 32px; font-size: 14px; font-weight: 500; color: var(--text-muted); }
-    .nav-links a { text-decoration: none; color: inherit; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--text-main); }
-    
-    /* HERO SECTION */
-    .hero { padding: 80px 0 60px; text-align: center; max-width: 800px; margin: 0 auto; }
-    .hero-tag { display: inline-block; padding: 6px 16px; background: #f3f4f6; border-radius: 99px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); margin-bottom: 24px; }
-    .hero h1 { font-family: var(--font-serif); font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 24px; }
-    .hero h1 i { font-style: italic; }
-    .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
-
-    /* AUCTION DASHBOARD (Das Herzstück) */
-    .dashboard-wrapper {
-      max-width: 960px;
-      margin: 0 auto 80px;
-      background: var(--card-bg);
+    .logo { font-family: var(--font-heading); font-size: 20px; font-weight: 700; letter-spacing: -0.03em; display: flex; align-items: center; gap: 4px; }
+    .logo span { color: var(--accent); }
+    .status { 
+      font-family: var(--font-mono); 
+      font-size: 11px; 
+      color: var(--accent); 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em;
+      background: var(--surface);
+      padding: 8px 16px;
+      border-radius: 99px;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05);
+    }
+    .status-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; box-shadow: 0 0 10px var(--accent); }
+    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+
+    main { flex: 1; }
+
+    .hero { padding: 80px 0 60px; text-align: center; }
+    
+    h1 { 
+      font-family: var(--font-heading);
+      font-size: clamp(3.5rem, 8vw, 6.5rem); 
+      font-weight: 700; 
+      line-height: 0.95; 
+      letter-spacing: -0.04em; 
+      margin-bottom: 24px; 
+      text-wrap: balance;
+      background: linear-gradient(180deg, #ffffff 0%, #a3a3a3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    h1 span { display: block; }
+    h1 .accent-text { 
+      background: linear-gradient(180deg, #ffffff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: var(--accent);
+    }
+
+    .subtitle { font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--muted); max-width: 550px; margin: 0 auto; font-weight: 400; }
+
+    .view-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 32px;
+      padding: 10px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      backdrop-filter: blur(10px);
+    }
+    .view-badge span { color: var(--accent); font-weight: 600; }
+
+    .grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 24px; 
+      margin-bottom: 32px;
+    }
+    .box { 
+      background: var(--surface); 
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      position: relative;
       overflow: hidden;
+      transition: border-color 0.3s ease;
+    }
+    .box:hover { border-color: rgba(255,255,255,0.15); }
+    
+    .box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     }
 
-    .dash-top {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border-bottom: 1px solid var(--border);
+    .label { 
+      font-family: var(--font-mono); 
+      font-size: 11px; 
+      color: var(--muted); 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+      margin-bottom: 16px; 
+      font-weight: 600;
     }
-
-    .dash-col { padding: 40px; }
-    .dash-col:first-child { border-right: 1px solid var(--border); }
-
-    .stat-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px; }
+    .value { 
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 5vw, 3.5rem); 
+      font-weight: 700; 
+      letter-spacing: -0.03em; 
+      font-variant-numeric: tabular-nums; 
+      line-height: 1;
+    }
+    .value.mono { font-family: var(--font-mono); font-weight: 500; letter-spacing: -0.02em; }
+    .value.accent { color: var(--accent); text-shadow: 0 0 30px rgba(204,255,0,0.2); }
     
-    /* Current Bid */
-    .current-bid { font-family: var(--font-serif); font-size: 64px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
-    .bidder-info { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
-    
-    /* Timer */
-    .timer-display { font-family: var(--font-sans); font-size: 56px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: var(--gold); font-variant-numeric: tabular-nums; }
-    .timer-label { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
+    #paymentBox {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      animation: fadeIn 0.5s ease;
+    }
+    .btn-pay {
+      width: 100%;
+      background: linear-gradient(180deg, #d4ff33 0%, #b3e600 100%);
+      color: #000;
+      border: none;
+      padding: 18px;
+      border-radius: 12px;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 0 30px var(--accent-glow); filter: brightness(1.05); }
 
-    /* Form Area */
-    .dash-bottom { padding: 40px; background: #fafafa; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: end; }
-    
+    .bid-section { 
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px; 
+      margin-bottom: 32px;
+      backdrop-filter: blur(12px);
+    }
+    .bid-form { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr auto; 
+      gap: 16px; 
+      margin-top: 24px; 
+      align-items: end;
+    }
     .input-group { display: flex; flex-direction: column; gap: 8px; }
-    .input-group label { font-size: 13px; font-weight: 600; color: var(--text-main); }
-    .input-group input { 
-      width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; 
-      font-family: var(--font-sans); font-size: 16px; outline: none; transition: border-color 0.2s;
+    .input-group label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    
+    .bid-form input { 
+      width: 100%;
+      background: rgba(0,0,0,0.4); 
+      border: 1px solid var(--border); 
+      padding: 16px; 
+      color: white; 
+      font-family: var(--font-mono); 
+      font-size: 15px; 
+      border-radius: 12px;
+      outline: none; 
+      transition: all 0.2s ease; 
     }
-    .input-group input:focus { border-color: var(--text-main); }
-
-    .btn-primary { 
-      background: var(--accent); color: #fff; border: none; padding: 14px 32px; border-radius: 8px; 
-      font-family: var(--font-sans); font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    .bid-form input:focus { 
+      border-color: var(--accent); 
+      box-shadow: 0 0 0 3px rgba(204,255,0,0.1);
+      background: rgba(0,0,0,0.6);
+    }
+    .bid-form button { 
+      background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
+      color: #000; 
+      border: none; 
+      padding: 16px 32px; 
+      border-radius: 12px;
+      font-family: var(--font-heading);
+      font-weight: 700; 
+      font-size: 15px; 
+      cursor: pointer; 
+      transition: all 0.2s ease; 
+      text-transform: uppercase; 
+      letter-spacing: 0.05em;
       height: 53px;
     }
-    .btn-primary:hover { background: var(--accent-hover); }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .bid-form button:hover { filter: brightness(0.9); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,255,255,0.1); }
     
-    .feedback { margin-top: 12px; font-size: 14px; font-weight: 500; }
-    .feedback.error { color: #dc2626; }
-    .feedback.success { color: #16a34a; }
+    .feedback { margin-top: 16px; font-size: 14px; font-family: var(--font-mono); text-align: center; }
+    .feedback.error { color: #ff4444; }
+    .feedback.success { color: var(--accent); }
 
-    /* Pay Now State */
-    #paymentBox { display: none; text-align: center; padding: 20px; background: #fffbeb; border: 1px solid #fcd34d; border-radius: 12px; margin-top: 16px; }
-    #paymentBox h3 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 8px; }
-    #paymentBox p { color: var(--text-muted); margin-bottom: 16px; }
-    .btn-pay { background: var(--text-main); color: #fff; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 300px; margin: 0 auto; }
+    /* Payment Info Badge */
+    .payment-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .payment-info strong {
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .payment-info svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--muted);
+    }
 
-    /* HOW IT WORKS */
-    .how-it-works { padding: 80px 0; border-top: 1px solid var(--border); }
-    .section-title { font-family: var(--font-serif); font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 48px; }
-    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
-    .step-icon { width: 56px; height: 56px; margin: 0 auto 20px; background: #f3f4f6; border-radius: 16px; display: flex; justify-content: center; align-items: center; }
-    .step-icon svg { width: 24px; height: 24px; stroke: var(--text-main); stroke-width: 2; fill: none; }
-    .step-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
-    .step-card p { font-size: 15px; color: var(--text-muted); }
+    .feed-section { 
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px; 
+      backdrop-filter: blur(12px);
+    }
+    .feed-list { display: flex; flex-direction: column; margin-top: 24px; }
+    .feed-item { 
+      display: flex; 
+      justify-content: space-between; 
+      font-family: var(--font-mono); 
+      font-size: 14px; 
+      padding: 16px 0; 
+      border-bottom: 1px solid var(--border); 
+      animation: slideIn 0.3s ease-out;
+    }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-item .email { color: var(--muted); }
+    .feed-item .amount { font-weight: 600; color: var(--text); }
 
-    /* RECENT WINNERS (Nur sichtbar wenn echte Daten da sind) */
-    #winners-section { display: none; padding: 80px 0; background: #fff; border-top: 1px solid var(--border); }
-    .winners-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .winner-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card-bg); }
-    .winner-img { width: 100%; height: 180px; background: #f3f4f6; display: flex; justify-content: center; align-items: center; font-family: var(--font-serif); font-size: 24px; color: var(--text-muted); border-bottom: 1px solid var(--border); }
-    .winner-details { padding: 24px; }
-    .winner-details h4 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-    .winner-details p { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      margin-top: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
 
-    /* FOOTER */
-    footer { border-top: 1px solid var(--border); padding: 40px 0; margin-top: auto; background: #fff; }
-    .footer-content { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--text-muted); }
-    .footer-links { display: flex; gap: 32px; }
-    .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--text-main); }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .dash-top { grid-template-columns: 1fr; }
-      .dash-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
-      .form-row { grid-template-columns: 1fr; }
-      .btn-primary { width: 100%; }
-      .steps-grid, .winners-grid { grid-template-columns: 1fr; }
-      .footer-content { flex-direction: column; gap: 16px; text-align: center; }
-      .current-bid { font-size: 48px; }
-      .timer-display { font-size: 40px; }
+      .grid, .bid-form { grid-template-columns: 1fr; }
+      .box, .bid-section, .feed-section { padding: 32px 24px; }
+      .bid-form button { width: 100%; height: auto; padding: 18px; }
+      h1 { font-size: clamp(2.5rem, 10vw, 4rem); }
+      footer { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
 <body>
 
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
   <div class="container">
     <header>
-      <div class="logo">Buy The Internet<span>.</span></div>
-      <div class="nav-links">
-        <a href="#how-it-works">How it works</a>
-        <a href="#winners-section">Past Winners</a>
-      </div>
+      <div class="logo">BUY THE INTERNET<span>.</span></div>
+      <div class="status"><div class="status-dot"></div> Live Auction</div>
     </header>
   </div>
 
   <main id="auctionView">
-    <!-- HERO -->
-    <div class="container hero">
-      <div class="hero-tag">Live Auction Ending Soon</div>
-      <h1>The ultimate <i>digital</i> billboard.</h1>
-      <p>One homepage. One winner. Every 24 hours. Place the highest bid to take over this entire screen with your brand.</p>
+    <div class="hero container">
+      <h1><span>BUY THE</span><span class="accent-text">INTERNET.</span></h1>
+      <p class="subtitle">The highest bidder takes over this entire homepage for a full day. When the clock hits zero, it's gone.</p>
+      
+      <div class="view-badge">
+        <div class="status-dot" style="animation: none;"></div>
+        <span id="viewCounter">2.000</span> Views
+      </div>
     </div>
 
-    <!-- AUCTION DASHBOARD -->
     <div class="container">
-      <div class="dashboard-wrapper">
-        
-        <!-- Top: Stats -->
-        <div class="dash-top">
-          <div class="dash-col">
-            <div class="stat-label">Current Highest Bid</div>
-            <div class="current-bid" id="highestBid">€0.00</div>
-            <div class="bidder-info">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              <span id="highestBidder">No bids yet</span>
-            </div>
-          </div>
-          <div class="dash-col">
-            <div class="stat-label">Time Remaining</div>
-            <div class="timer-display" id="countdown">00:00:00</div>
-            <div class="timer-label">Hours : Minutes : Seconds</div>
-          </div>
+      <div class="grid">
+        <div class="box">
+          <div class="label">Current Highest Bid</div>
+          <div class="value accent" id="highestBid">€0.00</div>
+          <div class="label" style="margin-top: 32px;">Highest Bidder</div>
+          <div class="value" id="highestBidder" style="font-size: 1.5rem; font-weight: 600;">—</div>
         </div>
-
-        <!-- Bottom: Form -->
-        <div class="dash-bottom">
-          <form id="bidForm">
-            <div class="form-row">
-              <div class="input-group">
-                <label>Your Email</label>
-                <input type="email" id="email" placeholder="name@company.com" required>
-              </div>
-              <div class="input-group">
-                <label>Your Bid (Min: <span id="nextMinBid">€0.00</span>)</label>
-                <input type="number" id="amount" placeholder="Enter amount in €" step="0.01" required>
-              </div>
-              <button type="submit" class="btn-primary" id="submitBtn">Place Bid</button>
-            </div>
-            <div id="bidFeedback" class="feedback"></div>
-          </form>
-
-          <!-- Pay Now Box -->
-          <div id="paymentBox">
-            <h3>Auction Ended</h3>
-            <p>You are the winning bidder. Secure your 24-hour takeover now.</p>
-            <button onclick="payNow()" class="btn-pay">Proceed to Payment via Stripe →</button>
+        <div class="box">
+          <div class="label">Time Remaining</div>
+          <div class="value mono" id="countdown">00:00:00</div>
+          <div class="label" style="margin-top: 32px;">Minimum Next Bid</div>
+          <div class="value" id="nextMinBid" style="font-size: 1.8rem;">€0.00</div>
+          
+          <div id="paymentBox" style="display: none;">
+              <div class="label" style="color: var(--accent);">Auction Ended!</div>
+              <button onclick="payNow()" class="btn-pay">Pay Now to claim your Ad</button>
           </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- HOW IT WORKS -->
-    <div class="container how-it-works" id="how-it-works">
-      <h2 class="section-title">A simple process. A massive impact.</h2>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-          </div>
-          <h3>1. Place your bid</h3>
-          <p>Enter your maximum offer. If someone outbids you, you can place a new one.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
-          </div>
-          <h3>2. Win the auction</h3>
-          <p>When the timer hits zero, the highest bidder is declared the winner.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-          </div>
-          <h3>3. Go Live</h3>
-          <p>Pay securely via Stripe, upload your design, and your brand takes over for 24 hours.</p>
         </div>
       </div>
-    </div>
 
-    <!-- RECENT WINNERS (JS controlled) -->
-    <div class="container" id="winners-section">
-      <h2 class="section-title">Recent Takeovers</h2>
-      <div class="winners-grid" id="winners-grid">
-        <!-- JS inserts cards here -->
+      <div class="bid-section">
+        <div class="label">Place your bid</div>
+        <form id="bidForm" class="bid-form">
+          <div class="input-group">
+            <label>Your Email</label>
+            <input type="email" id="email" placeholder="your@email.com" required>
+          </div>
+          <div class="input-group">
+            <label>Bid Amount (€)</label>
+            <input type="number" id="amount" placeholder="0.00" step="0.01" required>
+          </div>
+          <button type="submit">Bid Now</button>
+        </form>
+        <div id="bidFeedback" class="feedback"></div>
+
+        <!-- Payment Info -->
+        <div class="payment-info">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9c1.105 0 2 .895 2 2 0 .738-.404 1.376-1 1.723V18h-2v-2.277c-.596-.347-1-.985-1-1.723 0-1.105.895-2 2-2z"/></svg>
+          <span>Winning bids are securely processed via <strong>Stripe</strong></span>
+        </div>
+      </div>
+
+      <div class="feed-section">
+        <div class="label">Live Bid Feed</div>
+        <div class="feed-list" id="bidList">
+          <div class="feed-item"><span class="email">No bids yet</span><span class="amount">—</span></div>
+        </div>
       </div>
     </div>
   </main>
 
-  <footer>
-    <div class="container footer-content">
-      <div class="logo" style="font-size: 20px;">Buy The Internet.</div>
+  <div class="container">
+    <footer>
+      <div>&copy; 2024 BUY THE INTERNET. All rights reserved.</div>
       <div class="footer-links">
         <a href="/impressum.html">Impressum</a>
         <a href="/datenschutz.html">Datenschutz</a>
       </div>
-      <div>&copy; 2024. All rights reserved.</div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
   <script>
     const $ = (id) => document.getElementById(id);
@@ -307,13 +490,21 @@
       try {
         const hasCounted = sessionStorage.getItem('hasCountedView');
         let res;
+
         if (!hasCounted) {
           res = await fetch('/api/stats', { method: 'POST' });
           sessionStorage.setItem('hasCountedView', 'true');
         } else {
           res = await fetch('/api/stats');
         }
-      } catch (e) { console.error(e); }
+
+        if (res.ok) {
+          const data = await res.json();
+          $('viewCounter').textContent = new Intl.NumberFormat('de-DE').format(data.totalPageViews || 2000);
+        }
+      } catch (e) {
+        console.error('Fehler beim Laden der Views:', e);
+      }
     }
 
     async function loadAuction() {
@@ -323,64 +514,56 @@
         const data = await res.json();
         currentAuctionData = data;
 
-        // WENN EINE WERBUNG AKTIV IST (Full Screen Takeover)
         if (data.activeAd) {
           const ad = data.activeAd;
-          document.body.innerHTML = `
-            <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; background:${ad.bgUrl ? `url('${ad.bgUrl}') center/cover` : '#ffffff'}; color: ${ad.bgUrl ? '#fff' : '#000'};">
+          document.getElementById('auctionView').innerHTML = `
+            <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; background:${ad.bgUrl ? `url('${ad.bgUrl}') center/cover` : '#000'};">
               <div style="max-width:800px;">
                 ${ad.logoUrl ? `<img src="${ad.logoUrl}" style="max-height:80px; margin-bottom:32px;">` : ''}
-                ${ad.companyName ? `<p style="letter-spacing:0.1em; text-transform:uppercase; font-weight:bold; margin-bottom:16px; color:${ad.primaryColor || '#000'};">${ad.companyName}</p>` : ''}
-                <h1 style="font-family:var(--font-serif); font-size:clamp(3rem, 8vw, 5rem); margin:0 0 24px; line-height:1.1; font-weight:700;">${ad.headline || 'Welcome'}</h1>
-                <p style="font-size:1.25rem; opacity:0.8; margin-bottom:48px; line-height:1.6;">${ad.description || ''}</p>
-                ${ad.btnText ? `<a href="${ad.btnUrl || '#'}" style="display:inline-block; padding:16px 32px; background:${ad.primaryColor || '#000'}; color:${ad.bgUrl ? '#fff' : '#fff'}; text-decoration:none; font-weight:600; font-size:1.1rem; border-radius:8px;">${ad.btnText}</a>` : ''}
+                ${ad.companyName ? `<p style="color:${ad.primaryColor || '#ccff00'}; letter-spacing:0.1em; text-transform:uppercase; font-weight:bold; margin-bottom:16px;">${ad.companyName}</p>` : ''}
+                <h1 style="font-size:clamp(3rem, 8vw, 5rem); margin:0 0 24px; line-height:1.1; font-weight:900;">${ad.headline || 'Welcome'}</h1>
+                <p style="font-size:1.25rem; color:#aaa; margin-bottom:48px; line-height:1.6;">${ad.description || ''}</p>
+                ${ad.btnText ? `<a href="${ad.btnUrl || '#'}" style="display:inline-block; padding:20px 40px; background:${ad.primaryColor || '#ccff00'}; color:#000; text-decoration:none; font-weight:800; font-size:1.1rem; transition:transform 0.2s;">${ad.btnText}</a>` : ''}
               </div>
             </div>`;
           if (countdownInterval) clearInterval(countdownInterval);
           return;
         }
 
-        // WENN AUKTION BEENDET (Warten auf Zahlung)
         if (data.auctionStatus === 'ended') {
           $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : '—';
           $('highestBidder').textContent = data.winnerEmail ? maskEmail(data.winnerEmail) : '—';
           $('countdown').textContent = 'ENDED';
           $('paymentBox').style.display = 'block';
+          $('nextMinBid').textContent = '—';
           $('bidForm').style.display = 'none';
           if (countdownInterval) clearInterval(countdownInterval);
           return;
         }
 
-        // NORMALE AKTIVE AUKTION
         $('paymentBox').style.display = 'none';
-        $('bidForm').style.display = 'block';
+        $('bidForm').style.display = 'grid';
         $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : fmt(0);
-        $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : 'No bids yet';
+        $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : '—';
         $('nextMinBid').textContent = fmt(data.nextMinBid);
         renderCountdown(data.auction.endTime);
 
-        // ECHTE WINNER ANZEIGEN
-        if (data.recentWinners && data.recentWinners.length > 0) {
-          $('winners-section').style.display = 'block';
-          $('winners-grid').innerHTML = data.recentWinners.map(w => `
-            <div class="winner-card">
-              <div class="winner-img" style="${w.bgUrl ? `background: url('${w.bgUrl}') center/cover; color: transparent;` : ''}">
-                ${!w.bgUrl && w.logoUrl ? `<img src="${w.logoUrl}" style="max-height: 60px;">` : ''}
-                ${!w.bgUrl && !w.logoUrl ? w.companyName || 'Brand' : ''}
-              </div>
-              <div class="winner-details">
-                <h4>${w.companyName || 'Anonymous Brand'}</h4>
-                <p>${w.headline || '24-Hour Takeover'}</p>
-              </div>
-            </div>
-          `).join('');
+        const list = $('bidList');
+        if (!data.recentBids || data.recentBids.length === 0) {
+          list.innerHTML = '<div class="feed-item"><span class="email">No bids yet</span><span class="amount">—</span></div>';
+        } else {
+          list.innerHTML = data.recentBids.map(b => `
+            <div class="feed-item">
+              <span class="email">${maskEmail(b.email)}</span>
+              <span class="amount">${fmt(b.amount)}</span>
+            </div>`).join('');
         }
-
       } catch (e) { console.error(e); }
     }
 
     async function payNow() {
       if (!currentAuctionData || !currentAuctionData.highestBid) return;
+      
       try {
         const res = await fetch('/api/stripe', {
           method: 'POST',
@@ -392,8 +575,14 @@
           }),
         });
         const data = await res.json();
-        if (data.url) { window.location.href = data.url; } else { alert("Error: " + data.error); }
-      } catch(e) { alert("Network error."); }
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert("Error creating payment link: " + data.error);
+        }
+      } catch(e) {
+        alert("Network error.");
+      }
     }
 
     $('bidForm').addEventListener('submit', async (ev) => {
@@ -402,10 +591,10 @@
       fb.textContent = ''; fb.className = 'feedback';
       const email = $('email').value.trim();
       const eur = parseFloat($('amount').value);
-      if (isNaN(eur) || eur <= 0) { fb.textContent = 'Please enter a valid amount.'; fb.classList.add('error'); return; }
+      if (isNaN(eur) || eur <= 0) { fb.textContent = 'Enter a valid amount.'; fb.classList.add('error'); return; }
 
-      const btn = $('submitBtn');
-      btn.disabled = true; btn.textContent = 'Processing...';
+      const btn = ev.target.querySelector('button');
+      btn.disabled = true;
       try {
         const aRes = await fetch('/api/auction');
         const aData = await aRes.json();
@@ -416,7 +605,7 @@
         });
         const result = await res.json();
         if (result.success) {
-          fb.textContent = 'Your bid was placed successfully!';
+          fb.textContent = 'Bid placed successfully!';
           fb.classList.add('success');
           $('bidForm').reset();
           loadAuction();
@@ -425,9 +614,9 @@
           fb.classList.add('error');
         }
       } catch (e) {
-        fb.textContent = 'Network error. Please try again.';
+        fb.textContent = 'Network error.';
         fb.classList.add('error');
-      } finally { btn.disabled = false; btn.textContent = 'Place Bid'; }
+      } finally { btn.disabled = false; }
     });
 
     updateViewCounter();
