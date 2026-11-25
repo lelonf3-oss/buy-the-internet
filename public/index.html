@@ -82,7 +82,6 @@
       position: relative;
     }
 
-    /* Two hairline guides that frame the content column */
     .bg-grid {
       position: fixed;
       inset: 0;
@@ -92,7 +91,6 @@
         transparent calc(50% + 520px), rgba(255,255,255,0.045) calc(50% + 520px), rgba(255,255,255,0.045) calc(50% + 521px), transparent calc(50% + 521px));
     }
 
-    /* Soft overhead light, no colour */
     .bg-glow {
       position: fixed;
       top: -35%; left: 50%; transform: translateX(-50%);
@@ -253,7 +251,7 @@
     }
     .bid-form { 
       display: grid; 
-      grid-template-columns: 1fr 1fr auto; 
+      grid-template-columns: 1fr 1fr 1fr auto; /* Platz für die Nachricht */
       gap: 12px; 
       margin-top: 22px; 
       align-items: end;
@@ -301,7 +299,6 @@
     .feedback.error { color: #f87171; }
     .feedback.success { color: var(--live); }
 
-    /* Payment Info Badge */
     .payment-info {
       display: flex;
       align-items: center;
@@ -313,15 +310,8 @@
       font-size: 13px;
       color: var(--muted);
     }
-    .payment-info strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-    .payment-info svg {
-      width: 14px;
-      height: 14px;
-      fill: var(--muted);
-    }
+    .payment-info strong { color: var(--text); font-weight: 600; }
+    .payment-info svg { width: 14px; height: 14px; fill: var(--muted); }
 
     .feed-section { 
       background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%);
@@ -333,6 +323,7 @@
     .feed-item { 
       display: flex; 
       justify-content: space-between; 
+      align-items: center;
       font-family: var(--font-body); 
       font-size: 15px; 
       font-variant-numeric: tabular-nums;
@@ -341,68 +332,18 @@
       animation: slideIn 0.4s var(--ease);
     }
     .feed-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .feed-item-left { display: flex; flex-direction: column; gap: 4px; }
     .feed-item .email { color: var(--muted); }
+    .feed-item .message { color: var(--text); font-size: 13px; font-style: italic; }
     .feed-item .amount { font-weight: 600; color: var(--text); }
 
-    /* ========================================== -->
-    <!-- HOW IT WORKS SECTION (Neu hinzugefügt, im exakt gleichen Design) -->
-    <!-- ========================================== */
-    .how-it-works {
-      margin-top: 72px;
-    }
-    .section-title {
-      font-family: var(--font-heading);
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      margin-bottom: 12px;
-    }
-    .section-subtitle {
-      color: var(--muted);
-      font-size: 1.05rem;
-      margin-bottom: 32px;
-      max-width: 600px;
-    }
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .step-card {
-      background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 36px 32px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s ease;
-    }
-    .step-card:hover { border-color: var(--border-strong); }
-    .step-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
-    }
-    .step-number {
-      font-family: var(--font-body);
+    /* Payment Timer Banner */
+    #paymentTimerBanner {
+      margin-top: 12px;
       font-size: 13px;
-      color: var(--muted);
-      font-weight: 500;
-      margin-bottom: 16px;
-      display: block;
-    }
-    .step-card h3 {
-      font-family: var(--font-heading);
-      font-size: 1.35rem;
+      color: #f87171;
       font-weight: 600;
-      margin-bottom: 12px;
-      letter-spacing: -0.02em;
-    }
-    .step-card p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.6;
+      text-align: center;
     }
 
     footer {
@@ -428,8 +369,8 @@
 
     @media (max-width: 768px) {
       .hero { padding: 64px 0 48px; }
-      .grid, .bid-form, .steps-grid { grid-template-columns: 1fr; }
-      .box, .bid-section, .feed-section, .step-card { padding: 30px 24px; }
+      .grid, .bid-form { grid-template-columns: 1fr; }
+      .box, .bid-section, .feed-section { padding: 30px 24px; }
       .bid-form button { width: 100%; }
       h1 { font-size: clamp(3rem, 15vw, 4.75rem); }
       .value { font-size: clamp(3rem, 15vw, 4rem); }
@@ -471,6 +412,8 @@
           <div class="value accent" id="highestBid">€0.00</div>
           <div class="label sub">Highest Bidder</div>
           <div class="value" id="highestBidder" style="font-size: 1.5rem; font-weight: 600;">—</div>
+          <!-- NEU: Nachricht des Höchstbieters -->
+          <div id="highestBidderMessage" style="font-size: 13px; color: var(--text); font-style: italic; margin-top: 8px;"></div>
         </div>
         <div class="box">
           <div class="label">Time Remaining</div>
@@ -479,8 +422,9 @@
           <div class="value" id="nextMinBid" style="font-size: 1.8rem;">€0.00</div>
           
           <div id="paymentBox" style="display: none;">
-              <div class="label" style="color: var(--accent);">Auction Ended!</div>
+              <div class="label" style="color: #f87171;">Auction Ended!</div>
               <button onclick="payNow()" class="btn-pay">Pay Now to claim your Ad</button>
+              <div id="paymentTimerBanner"></div>
           </div>
         </div>
       </div>
@@ -496,11 +440,14 @@
             <label>Bid Amount (€)</label>
             <input type="number" id="amount" placeholder="0.00" step="0.01" required>
           </div>
+          <div class="input-group">
+            <label>Optional Message</label>
+            <input type="text" id="message" placeholder="e.g. Follow us @..." maxlength="50">
+          </div>
           <button type="submit">Bid Now</button>
         </form>
         <div id="bidFeedback" class="feedback"></div>
 
-        <!-- Payment Info -->
         <div class="payment-info">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9c1.105 0 2 .895 2 2 0 .738-.404 1.376-1 1.723V18h-2v-2.277c-.596-.347-1-.985-1-1.723 0-1.105.895-2 2-2z"/></svg>
           <span>Winning bids are securely processed via <strong>Stripe</strong></span>
@@ -514,9 +461,6 @@
         </div>
       </div>
 
-      <!-- ========================================== -->
-      <!-- HOW IT WORKS SECTION -->
-      <!-- ========================================== -->
       <section class="how-it-works">
         <h2 class="section-title">How it works</h2>
         <p class="section-subtitle">A simple, transparent process with a massive opportunity for your brand.</p>
@@ -565,6 +509,7 @@
     };
 
     let countdownInterval = null;
+    let paymentTimerInterval = null;
     let currentAuctionData = null;
 
     function renderCountdown(endTime) {
@@ -582,25 +527,46 @@
       countdownInterval = setInterval(tick, 1000);
     }
 
+    // NEU: Timer für die 30-Minuten-Zahlungsfrist
+    function startPaymentTimeout(endedAt) {
+      if (paymentTimerInterval) clearInterval(paymentTimerInterval);
+      const el = $('paymentTimerBanner');
+      
+      const tick = () => {
+        const now = Math.floor(Date.now() / 1000);
+        const deadline = endedAt + 1800; // 30 Minuten (1800 Sekunden)
+        const left = deadline - now;
+        
+        if (left <= 0) {
+          el.textContent = "Payment time expired. Reloading...";
+          setTimeout(() => window.location.reload(), 3000);
+          clearInterval(paymentTimerInterval);
+          return;
+        }
+        
+        const m = Math.floor(left / 60);
+        const s = left % 60;
+        el.textContent = `You have ${m}m ${s}s left to pay before the next bidder wins.`;
+      };
+      tick();
+      paymentTimerInterval = setInterval(tick, 1000);
+    }
+
     async function updateViewCounter() {
       try {
         const hasCounted = sessionStorage.getItem('hasCountedView');
         let res;
-
         if (!hasCounted) {
           res = await fetch('/api/stats', { method: 'POST' });
           sessionStorage.setItem('hasCountedView', 'true');
         } else {
           res = await fetch('/api/stats');
         }
-
         if (res.ok) {
           const data = await res.json();
           $('viewCounter').textContent = new Intl.NumberFormat('de-DE').format(data.totalPageViews || 2000);
         }
-      } catch (e) {
-        console.error('Fehler beim Laden der Views:', e);
-      }
+      } catch (e) {}
     }
 
     async function loadAuction() {
@@ -623,24 +589,32 @@
               </div>
             </div>`;
           if (countdownInterval) clearInterval(countdownInterval);
+          if (paymentTimerInterval) clearInterval(paymentTimerInterval);
           return;
         }
 
         if (data.auctionStatus === 'ended') {
           $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : '—';
           $('highestBidder').textContent = data.winnerEmail ? maskEmail(data.winnerEmail) : '—';
+          $('highestBidderMessage').textContent = data.highestBid?.message ? `"${data.highestBid.message}"` : '';
           $('countdown').textContent = 'ENDED';
           $('paymentBox').style.display = 'block';
           $('nextMinBid').textContent = '—';
           $('bidForm').style.display = 'none';
           if (countdownInterval) clearInterval(countdownInterval);
+          
+          // Starte den 30-Minuten-Timer für die Zahlung
+          if (data.endedAt) startPaymentTimeout(data.endedAt);
           return;
         }
 
+        // Aktive Auktion
+        if (paymentTimerInterval) clearInterval(paymentTimerInterval);
         $('paymentBox').style.display = 'none';
         $('bidForm').style.display = 'grid';
         $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : fmt(0);
         $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : '—';
+        $('highestBidderMessage').textContent = data.highestBid?.message ? `"${data.highestBid.message}"` : '';
         $('nextMinBid').textContent = fmt(data.nextMinBid);
         renderCountdown(data.auction.endTime);
 
@@ -650,7 +624,10 @@
         } else {
           list.innerHTML = data.recentBids.map(b => `
             <div class="feed-item">
-              <span class="email">${maskEmail(b.email)}</span>
+              <div class="feed-item-left">
+                <span class="email">${maskEmail(b.email)}</span>
+                ${b.message ? `<span class="message">"${b.message}"</span>` : ''}
+              </div>
               <span class="amount">${fmt(b.amount)}</span>
             </div>`).join('');
         }
@@ -659,7 +636,6 @@
 
     async function payNow() {
       if (!currentAuctionData || !currentAuctionData.highestBid) return;
-      
       try {
         const res = await fetch('/api/stripe', {
           method: 'POST',
@@ -676,9 +652,7 @@
         } else {
           alert("Error creating payment link: " + data.error);
         }
-      } catch(e) {
-        alert("Network error.");
-      }
+      } catch(e) { alert("Network error."); }
     }
 
     $('bidForm').addEventListener('submit', async (ev) => {
@@ -687,6 +661,8 @@
       fb.textContent = ''; fb.className = 'feedback';
       const email = $('email').value.trim();
       const eur = parseFloat($('amount').value);
+      const msg = $('message').value.trim();
+      
       if (isNaN(eur) || eur <= 0) { fb.textContent = 'Enter a valid amount.'; fb.classList.add('error'); return; }
 
       const btn = ev.target.querySelector('button');
@@ -697,7 +673,7 @@
         const res = await fetch('/api/bid', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ auctionId: aData.auction.id, amount: Math.round(eur*100), email }),
+          body: JSON.stringify({ auctionId: aData.auction.id, amount: Math.round(eur*100), email, message: msg }),
         });
         const result = await res.json();
         if (result.success) {
