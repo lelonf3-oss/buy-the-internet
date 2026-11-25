@@ -1,5 +1,5 @@
 export async function onRequestPost({ request, env }) {
-  const { auctionId, amount, email } = await request.json();
+  const { auctionId, amount, email, message } = await request.json();
 
   if (!auctionId || !amount || amount < 100) {
     return json({ error: "Invalid amount" }, 400);
@@ -40,11 +40,13 @@ export async function onRequestPost({ request, env }) {
     ).bind(email).first();
   }
 
-  await env.DB.prepare(
-    "INSERT INTO bids (auction_id, user_id, amount) VALUES (?, ?, ?)"
-  ).bind(auctionId, user.id, amount).run();
+  // HIER: Die Nachricht wird jetzt mitgespeichert (max 50 Zeichen)
+  const msgToSave = message ? message.substring(0, 50) : null;
 
-  // Last-Minute-Verlängerung: 2 Minuten
+  await env.DB.prepare(
+    "INSERT INTO bids (auction_id, user_id, amount, message) VALUES (?, ?, ?, ?)"
+  ).bind(auctionId, user.id, amount, msgToSave).run();
+
   let newEndTime = auction.end_time;
   if (auction.end_time - now < 120) {
     newEndTime = now + 120;
