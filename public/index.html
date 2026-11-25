@@ -24,7 +24,7 @@
   <meta property="twitter:description" content="The highest bidder takes over this entire homepage for a full day. When the clock hits zero, it's gone.">
   <meta property="twitter:image" content="https://buy-the-internet.pages.dev/og-image.jpg">
 
-  <!-- Schema.org JSON-LD -->
+  <!-- Schema.org JSON-LD (Für Google) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -47,7 +47,6 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Neue, moderne Schriftart: Space Grotesk für Headings, Inter für Text, JetBrains Mono für Zahlen -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   
   <style>
@@ -134,7 +133,6 @@
 
     .hero { padding: 80px 0 60px; text-align: center; }
     
-    /* Der neue Gradient-Text für die Überschrift */
     h1 { 
       font-family: var(--font-heading);
       font-size: clamp(3.5rem, 8vw, 6.5rem); 
@@ -154,7 +152,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      color: var(--accent); /* Fallback */
+      color: var(--accent);
     }
 
     .subtitle { font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--muted); max-width: 550px; margin: 0 auto; font-weight: 400; }
@@ -303,6 +301,30 @@
     .feedback.error { color: #ff4444; }
     .feedback.success { color: var(--accent); }
 
+    /* NEU: Payment Info Badge */
+    .payment-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .payment-info strong {
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .payment-info svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--muted);
+    }
+
     .feed-section { 
       background: var(--surface);
       border: 1px solid var(--border);
@@ -410,6 +432,12 @@
           <button type="submit">Bid Now</button>
         </form>
         <div id="bidFeedback" class="feedback"></div>
+
+        <!-- NEU: Der Payment-Hinweis -->
+        <div class="payment-info">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9c1.105 0 2 .895 2 2 0 .738-.404 1.376-1 1.723V18h-2v-2.277c-.596-.347-1-.985-1-1.723 0-1.105.895-2 2-2z"/></svg>
+          <span>Winning bids are securely processed via <strong>Stripe</strong></span>
+        </div>
       </div>
 
       <div class="feed-section">
