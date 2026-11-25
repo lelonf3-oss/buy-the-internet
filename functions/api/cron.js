@@ -10,37 +10,55 @@ export async function onRequestGet({ env }) {
   for (const ad of expiredAds.results) {
     await env.DB.prepare("UPDATE auctions SET status = 'completed' WHERE id = ?").bind(ad.id).run();
     log.push(`Ad for auction #${ad.id} expired.`);
-    
-    // Neue Auktion starten (12 Stunden = 43200 Sekunden)
     await env.DB.prepare(
       "INSERT INTO auctions (status, start_time, end_time, min_bid, min_increment) VALUES ('active', ?, ?, 100, 100)"
     ).bind(now, now + 43200).run();
     log.push("Started new 12h auction.");
   }
 
-  // 2. Prüfen, ob eine laufende Auktion abgelaufen ist (ohne Bezahlung)
+  // 2. Prüfen, ob eine laufende Auktion abgelaufen ist
   const expiredAuction = await env.DB.prepare(
     "SELECT * FROM auctions WHERE status = 'active' AND end_time <= ?"
   ).bind(now).first();
 
   if (expiredAuction) {
-    // Höchstes Gebot finden
     const highestBid = await env.DB.prepare(
       "SELECT * FROM bids WHERE auction_id = ? ORDER BY amount DESC LIMIT 1"
     ).bind(expiredAuction.id).first();
 
     if (highestBid) {
-      // Status auf 'ended' setzen (wartet auf Zahlung)
-      await env.DB.prepare("UPDATE auctions SET status = 'ended', winner_id = ? WHERE id = ?")
-        .bind(highestBid.user_id, expiredAuction.id).run();
-      log.push(`Auction #${expiredAuction.id} ended. Winner ID: ${highestBid.user_id}`);
+      await env.DB.prepare("UPDATE auctions SET status = 'ended', winner_id = ?, ended_at = ? WHERE id = ?")
+        .bind(highestBid.user_id, now, expiredAuction.id).run();
+      log.push(`Auction #${expiredAuction.id} ended. Waiting for payment.`);
     } else {
-      // Keine Gebote -> einfach neue Auktion starten (12 Stunden)
       await env.DB.prepare("UPDATE auctions SET status = 'completed' WHERE id = ?").bind(expiredAuction.id).run();
       await env.DB.prepare(
         "INSERT INTO auctions (status, start_time, end_time, min_bid, min_increment) VALUES ('active', ?, ?, 100, 100)"
       ).bind(now, now + 43200).run();
       log.push("No bids. Started new 12h auction.");
+    }
+  }
+
+  // 3. Fake-Bieter (Deadbeats) bestrafen (1 Stunde Karenzzeit)
+  const deadbeatAuction = await env.DB.prepare(
+    "SELECT * FROM auctions WHERE status = 'ended' AND ended_at <= ?"
+  ).bind(now - 3600).first();
+
+  if (deadbeatAuction) {
+    const nextHighestBid = await env.DB.prepare(
+      "SELECT * FROM bids WHERE auction_id = ? AND user_id != ? ORDER BY amount DESC LIMIT 1"
+    ).bind(deadbeatAuction.id, deadbeatAuction.winner_id).first();
+
+    if (nextHighestBid) {
+      await env.DB.prepare("UPDATE auctions SET winner_id = ?, ended_at = ? WHERE id = ?")
+        .bind(nextHighestBid.user_id, now, deadbeatAuction.id).run();
+      log.push(`Deadbeat bidder. Auction #${deadbeatAuction.id} passed to next bidder.`);
+    } else {
+      await env.DB.prepare("UPDATE auctions SET status = 'completed' WHERE id = ?").bind(deadbeatAuction.id).run();
+      await env.DB.prepare(
+        "INSERT INTO auctions (status, start_time, end_time, min_bid, min_increment) VALUES ('active', ?, ?, 100, 100)"
+      ).bind(now, now + 43200).run();
+      log.push("No other bidders. Auction failed. Started new 12h auction.");
     }
   }
 
