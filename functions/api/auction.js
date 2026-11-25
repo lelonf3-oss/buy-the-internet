@@ -1,7 +1,6 @@
 export async function onRequestGet({ env }) {
   const now = Math.floor(Date.now() / 1000);
 
-  // 1. Aktive Werbung prüfen
   const activeAd = await env.DB.prepare(
     "SELECT ad_data FROM auctions WHERE status = 'paid' AND ad_active_until > ? ORDER BY id DESC LIMIT 1"
   ).bind(now).first();
@@ -10,24 +9,15 @@ export async function onRequestGet({ env }) {
     return json({ activeAd: JSON.parse(activeAd.ad_data) });
   }
 
-  // 2. Echte vergangene Gewinner holen (für die "Recent Winners" Sektion)
-  const pastWinners = await env.DB.prepare(
-    "SELECT ad_data FROM auctions WHERE status = 'completed' AND ad_data IS NOT NULL ORDER BY id DESC LIMIT 3"
-  ).all();
-
-  const winnersList = pastWinners.results.map(w => JSON.parse(w.ad_data));
-
-  // 3. Auktion laden (entweder 'active' oder 'ended')
   const auction = await env.DB.prepare(
     "SELECT * FROM auctions WHERE status IN ('active', 'ended') ORDER BY id DESC LIMIT 1"
   ).first();
 
-  if (!auction) {
-    return json({ error: "No auction found" }, 404);
-  }
+  if (!auction) return json({ error: "No auction found" }, 404);
 
+  // HIER: Wir holen jetzt auch die Nachricht (b.message) mit ab
   const bids = await env.DB.prepare(
-    `SELECT b.amount, b.created_at, u.email
+    `SELECT b.amount, b.created_at, b.message, u.email
      FROM bids b JOIN users u ON b.user_id = u.id
      WHERE b.auction_id = ? ORDER BY b.amount DESC LIMIT 20`
   ).bind(auction.id).all();
@@ -35,18 +25,16 @@ export async function onRequestGet({ env }) {
   const highest = bids.results[0];
   const minNext = highest ? highest.amount + auction.min_increment : auction.min_bid;
 
-  // Wenn die Auktion beendet ist und auf Zahlung wartet
   if (auction.status === 'ended') {
     return json({
       auctionStatus: 'ended',
       auctionId: auction.id,
       highestBid: highest || null,
       winnerEmail: highest ? highest.email : null,
-      recentWinners: winnersList
+      endedAt: auction.ended_at // Wichtig für den Timer
     });
   }
 
-  // Normale aktive Auktion
   return json({
     auctionStatus: 'active',
     auction: {
@@ -58,7 +46,6 @@ export async function onRequestGet({ env }) {
     highestBid: highest || null,
     nextMinBid: minNext,
     recentBids: bids.results,
-    recentWinners: winnersList
   });
 }
 
