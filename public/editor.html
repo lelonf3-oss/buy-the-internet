@@ -131,7 +131,8 @@
 
   <script>
     const $ = (id) => document.getElementById(id);
-    const token = new URLSearchParams(location.search).get('token');
+    // NEU: Holt die session_id aus der URL (nach der Stripe-Zahlung)
+    const session_id = new URLSearchParams(location.search).get('session_id');
 
     function getData() {
       return {
@@ -188,10 +189,9 @@
       const status = $('status');
       status.textContent = ''; status.className = 'status';
 
-      if (!token) {
-        status.textContent = 'Demo Mode: Data saved locally only.';
-        status.style.color = 'var(--accent)';
-        localStorage.setItem('bti_ad_data', JSON.stringify(data));
+      if (!session_id) {
+        status.textContent = 'Error: Missing payment session. Please pay first.';
+        status.style.color = '#ff4444';
         return;
       }
 
@@ -200,14 +200,15 @@
         const res = await fetch('/api/editor', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token, adData: data }),
+          body: JSON.stringify({ session_id, adData: data }),
         });
         if (res.ok) {
           status.textContent = 'Successfully saved. Your takeover is ready.';
           status.style.color = 'var(--accent)';
           btn.textContent = 'Saved!';
         } else {
-          status.textContent = 'Error: Invalid token or server issue.';
+          const err = await res.json();
+          status.textContent = 'Error: ' + (err.error || 'Invalid session.');
           status.style.color = '#ff4444';
           btn.textContent = 'Save & Publish';
         }
@@ -217,12 +218,6 @@
         btn.textContent = 'Save & Publish';
       } finally { btn.disabled = false; }
     });
-
-    // Load saved demo data
-    try {
-      const saved = JSON.parse(localStorage.getItem('bti_ad_data') || 'null');
-      if (saved) Object.keys(saved).forEach(k => { if ($(k)) $(k).value = saved[k]; });
-    } catch (e) {}
 
     renderPreview();
   </script>
