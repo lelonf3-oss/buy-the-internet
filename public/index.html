@@ -9,65 +9,265 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #000000;
-      --surface: #0a0a0a;
-      --border: #222222;
+      --bg: #050505;
+      --surface: rgba(255, 255, 255, 0.03);
+      --surface-hover: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(204, 255, 0, 0.5);
       --text: #ffffff;
       --muted: #888888;
       --accent: #ccff00;
-      --accent-text: #000000;
+      --accent-glow: rgba(204, 255, 0, 0.2);
       --font: 'Inter', sans-serif;
       --mono: 'JetBrains Mono', monospace;
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: var(--bg); color: var(--text); font-family: var(--font); -webkit-font-smoothing: antialiased; line-height: 1.4; }
     
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    header { padding: 32px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-    .logo { font-size: 20px; font-weight: 900; letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px; }
+    body { 
+      background-color: var(--bg); 
+      color: var(--text); 
+      font-family: var(--font); 
+      -webkit-font-smoothing: antialiased; 
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Hintergrund-Effekt (Glow) */
+    .bg-glow {
+      position: fixed;
+      top: -20%; left: 50%; transform: translateX(-50%);
+      width: 100vw; height: 60vh;
+      background: radial-gradient(circle, rgba(204,255,0,0.08) 0%, rgba(5,5,5,0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    
+    /* Header */
+    header { 
+      padding: 24px 0; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      border-bottom: 1px solid var(--border); 
+    }
+    .logo { font-size: 20px; font-weight: 900; letter-spacing: -0.05em; display: flex; align-items: center; gap: 4px; }
     .logo span { color: var(--accent); }
-    .status { font-family: var(--mono); font-size: 12px; color: var(--accent); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
-    .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+    .status { 
+      font-family: var(--mono); 
+      font-size: 11px; 
+      color: var(--accent); 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em;
+      background: var(--surface);
+      padding: 8px 16px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+    }
+    .status-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; box-shadow: 0 0 10px var(--accent); }
+    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 
-    .hero { padding: 80px 0; text-align: center; border-bottom: 1px solid var(--border); }
-    h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 24px; }
+    /* Hero */
+    .hero { padding: 80px 0 60px; text-align: center; }
+    h1 { 
+      font-size: clamp(3.5rem, 8vw, 6.5rem); 
+      font-weight: 900; 
+      line-height: 0.95; 
+      letter-spacing: -0.04em; 
+      margin-bottom: 24px; 
+      text-wrap: balance;
+    }
     h1 span { display: block; }
-    .subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--muted); max-width: 600px; margin: 0 auto; }
+    .subtitle { font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--muted); max-width: 550px; margin: 0 auto; font-weight: 400; }
 
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
-    .box { background: var(--bg); padding: 48px; display: flex; flex-direction: column; justify-content: center; }
-    .label { font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
-    .value { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-    .value.mono { font-family: var(--mono); font-weight: 600; }
-    .value.accent { color: var(--accent); }
+    /* View Counter Badge */
+    .view-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 32px;
+      padding: 10px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+      backdrop-filter: blur(10px);
+    }
+    .view-badge span { color: var(--accent); font-weight: 600; }
+
+    /* Main Grid (Bid & Time) */
+    .grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 24px; 
+      margin-bottom: 32px;
+    }
+    .box { 
+      background: var(--surface); 
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease;
+    }
+    .box:hover { border-color: rgba(255,255,255,0.15); }
     
-    .bid-section { padding: 48px; border-bottom: 1px solid var(--border); text-align: center; }
-    .bid-form { display: flex; gap: 16px; max-width: 600px; margin: 24px auto 0; }
-    .bid-form input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 20px; color: white; font-family: var(--mono); font-size: 16px; outline: none; transition: border 0.2s; }
-    .bid-form input:focus { border-color: var(--accent); }
-    .bid-form button { background: var(--accent); color: var(--accent-text); border: none; padding: 0 32px; font-weight: 800; font-size: 16px; cursor: pointer; transition: opacity 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
-    .bid-form button:hover { opacity: 0.8; }
-    .feedback { margin-top: 16px; font-size: 14px; font-family: var(--mono); }
+    .box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    }
+
+    .label { 
+      font-family: var(--mono); 
+      font-size: 11px; 
+      color: var(--muted); 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+      margin-bottom: 16px; 
+      font-weight: 600;
+    }
+    .value { 
+      font-size: clamp(2.5rem, 5vw, 3.5rem); 
+      font-weight: 800; 
+      letter-spacing: -0.03em; 
+      font-variant-numeric: tabular-nums; 
+      line-height: 1;
+    }
+    .value.mono { font-family: var(--mono); font-weight: 500; letter-spacing: -0.02em; }
+    .value.accent { color: var(--accent); text-shadow: 0 0 30px rgba(204,255,0,0.2); }
+    
+    /* Payment Box (Ended State) */
+    #paymentBox {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      animation: fadeIn 0.5s ease;
+    }
+    .btn-pay {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 0 30px var(--accent-glow); filter: brightness(1.1); }
+
+    /* Bid Form Section */
+    .bid-section { 
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px; 
+      margin-bottom: 32px;
+      backdrop-filter: blur(12px);
+    }
+    .bid-form { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr auto; 
+      gap: 16px; 
+      margin-top: 24px; 
+      align-items: end;
+    }
+    .input-group { display: flex; flex-direction: column; gap: 8px; }
+    .input-group label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    
+    .bid-form input { 
+      width: 100%;
+      background: rgba(0,0,0,0.4); 
+      border: 1px solid var(--border); 
+      padding: 16px; 
+      color: white; 
+      font-family: var(--mono); 
+      font-size: 15px; 
+      border-radius: 12px;
+      outline: none; 
+      transition: all 0.2s ease; 
+    }
+    .bid-form input:focus { 
+      border-color: var(--accent); 
+      box-shadow: 0 0 0 3px rgba(204,255,0,0.1);
+      background: rgba(0,0,0,0.6);
+    }
+    .bid-form button { 
+      background: var(--accent); 
+      color: #000; 
+      border: none; 
+      padding: 16px 32px; 
+      border-radius: 12px;
+      font-weight: 800; 
+      font-size: 15px; 
+      cursor: pointer; 
+      transition: all 0.2s ease; 
+      text-transform: uppercase; 
+      letter-spacing: 0.05em;
+      height: 53px;
+    }
+    .bid-form button:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(204,255,0,0.15); }
+    
+    .feedback { margin-top: 16px; font-size: 14px; font-family: var(--mono); text-align: center; }
     .feedback.error { color: #ff4444; }
     .feedback.success { color: var(--accent); }
 
-    .feed-section { padding: 48px; }
-    .feed-list { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
-    .feed-item { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-    .feed-item:last-child { border-bottom: none; padding-bottom: 0; }
+    /* Feed Section */
+    .feed-section { 
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px; 
+      backdrop-filter: blur(12px);
+    }
+    .feed-list { display: flex; flex-direction: column; margin-top: 24px; }
+    .feed-item { 
+      display: flex; 
+      justify-content: space-between; 
+      font-family: var(--mono); 
+      font-size: 14px; 
+      padding: 16px 0; 
+      border-bottom: 1px solid var(--border); 
+      animation: slideIn 0.3s ease-out;
+    }
+    .feed-item:last-child { border-bottom: none; }
     .feed-item .email { color: var(--muted); }
-    .feed-item .amount { font-weight: 600; }
+    .feed-item .amount { font-weight: 600; color: var(--text); }
+
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     @media (max-width: 768px) {
-      .grid { grid-template-columns: 1fr; }
-      .bid-form { flex-direction: column; }
-      .bid-form button { padding: 20px; }
+      .grid, .bid-form { grid-template-columns: 1fr; }
       .box, .bid-section, .feed-section { padding: 32px 24px; }
+      .bid-form button { width: 100%; height: auto; padding: 18px; }
+      h1 { font-size: clamp(2.5rem, 10vw, 4rem); }
     }
   </style>
 </head>
 <body>
+
+  <div class="bg-glow"></div>
 
   <div class="container">
     <header>
@@ -81,30 +281,31 @@
       <h1><span>BUY THE</span><span>INTERNET<span style="color: var(--accent)">.</span></span></h1>
       <p class="subtitle">The highest bidder takes over this entire homepage for a full day. When the clock hits zero, it's gone.</p>
       
-      <div style="margin-top: 32px; font-family: var(--mono); font-size: 14px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.05em;">
-        <div class="status-dot" style="width: 6px; height: 6px; animation: none;"></div>
+      <!-- View Counter (Modern Badge) -->
+      <div class="view-badge">
+        <div class="status-dot" style="animation: none;"></div>
         <span id="viewCounter">2.000</span> Views
       </div>
     </div>
 
     <div class="container">
       <div class="grid">
-        <div class="box" style="border-right: 1px solid var(--border);">
+        <div class="box">
           <div class="label">Current Highest Bid</div>
           <div class="value accent" id="highestBid">€0.00</div>
-          <div class="label" style="margin-top: 24px;">Highest Bidder</div>
-          <div class="value" id="highestBidder" style="font-size: 1.5rem;">—</div>
+          <div class="label" style="margin-top: 32px;">Highest Bidder</div>
+          <div class="value" id="highestBidder" style="font-size: 1.5rem; font-weight: 600;">—</div>
         </div>
         <div class="box">
           <div class="label">Time Remaining</div>
           <div class="value mono" id="countdown">00:00:00</div>
-          <div class="label" style="margin-top: 24px;">Minimum Next Bid</div>
-          <div class="value" id="nextMinBid" style="font-size: 2rem;">€0.00</div>
+          <div class="label" style="margin-top: 32px;">Minimum Next Bid</div>
+          <div class="value" id="nextMinBid" style="font-size: 1.8rem;">€0.00</div>
           
-          <!-- NEU: Bezahl-Button (wird nur angezeigt, wenn Auktion beendet) -->
-          <div id="paymentBox" style="display: none; margin-top: 20px;">
-              <div class="label">Auction Ended!</div>
-              <button onclick="payNow()" style="background: var(--accent); color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; margin-top: 10px; text-transform: uppercase;">Pay Now to claim your Ad</button>
+          <!-- Bezahl-Button (wird nur angezeigt, wenn Auktion beendet) -->
+          <div id="paymentBox" style="display: none;">
+              <div class="label" style="color: var(--accent);">Auction Ended!</div>
+              <button onclick="payNow()" class="btn-pay">Pay Now to claim your Ad</button>
           </div>
         </div>
       </div>
@@ -112,8 +313,14 @@
       <div class="bid-section">
         <div class="label">Place your bid</div>
         <form id="bidForm" class="bid-form">
-          <input type="email" id="email" placeholder="your@email.com" required>
-          <input type="number" id="amount" placeholder="Amount in €" step="0.01" required>
+          <div class="input-group">
+            <label>Your Email</label>
+            <input type="email" id="email" placeholder="your@email.com" required>
+          </div>
+          <div class="input-group">
+            <label>Bid Amount (€)</label>
+            <input type="number" id="amount" placeholder="0.00" step="0.01" required>
+          </div>
           <button type="submit">Bid Now</button>
         </form>
         <div id="bidFeedback" class="feedback"></div>
@@ -214,7 +421,7 @@
 
         // NORMALE AKTIVE AUKTION
         $('paymentBox').style.display = 'none';
-        $('bidForm').style.display = 'flex';
+        $('bidForm').style.display = 'grid';
         $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : fmt(0);
         $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : '—';
         $('nextMinBid').textContent = fmt(data.nextMinBid);
@@ -233,7 +440,7 @@
       } catch (e) { console.error(e); }
     }
 
-    // NEU: Funktion, um die Stripe-Kasse aufzurufen
+    // Funktion, um die Stripe-Kasse aufzurufen
     async function payNow() {
       if (!currentAuctionData || !currentAuctionData.highestBid) return;
       
