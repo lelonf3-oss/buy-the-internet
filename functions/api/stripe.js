@@ -5,13 +5,13 @@ export async function onRequestGet() {
 }
 
 export async function onRequestPost({ request, env }) {
-  // Die apiVersion-Zeile wurde entfernt, um den Fehler zu beheben.
   const stripe = new Stripe(env.STRIPE_SECRET_KEY);
-  const url = new URL(request.url);
+  
+  // Prüfen, ob der Request von Stripe (Webhook) kommt
+  const sig = request.headers.get('stripe-signature');
 
-  // 1. WEBHOOK (wird aufgerufen, wenn jemand bezahlt hat)
-  if (url.pathname.endsWith('/stripe-webhook')) {
-    const sig = request.headers.get('stripe-signature');
+  // 1. WENN ES EIN WEBHOOK IST (Zahlung abgeschlossen)
+  if (sig) {
     const body = await request.text();
     let event;
     try {
@@ -33,7 +33,7 @@ export async function onRequestPost({ request, env }) {
     return new Response('OK', { status: 200 });
   }
 
-  // 2. CHECKOUT ERSTELLEN
+  // 2. WENN ES KEIN WEBHOOK IST (Jemand klickt auf "Pay Now")
   const { auctionId, amount, email } = await request.json();
   try {
     const session = await stripe.checkout.sessions.create({
