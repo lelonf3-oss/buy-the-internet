@@ -1,30 +1,39 @@
+import Stripe from 'stripe';
+
 export async function onRequestPost({ request, env }) {
   try {
-    const { token, adData } = await request.json();
+    const { session_id, adData } = await request.json();
 
-    // Finde die aktuellste bezahlte Auktion (für den MVP)
-    const auction = await env.DB.prepare(
-      "SELECT id FROM auctions WHERE status = 'paid' ORDER BY id DESC LIMIT 1"
-    ).first();
-
-    if (!auction) {
-      return new Response(JSON.stringify({ error: "No paid auction found to save to." }), { 
-        status: 400, headers: { 'Content-Type': 'application/json' } 
-      });
+    if (!session_id) {
+      return json({ error: "Missing payment session ID." }, 400);
     }
 
-    // Werbedaten als Text (JSON) speichern
+    const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: '2025-10-29' });
+
+    // 1. Prüfe bei Stripe, ob diese Session wirklich bezahlt wurde!
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+
+    if (session.payment_status !== 'paid') {
+      return json({ error: "Payment not completed." }, 403);
+    }
+
+    const auctionId = session.metadata.auctionId;
+
+    // 2. Speichere die Werbedaten für GENAU diese Auktion
     const adDataString = JSON.stringify(adData);
     await env.DB.prepare(
-      "UPDATE auctions SET ad_data = ? WHERE id = ?"
-    ).bind(adDataString, auction.id).run();
+      "UPDATE auctions SET ad_data = ? WHERE id = ? AND winner_paid = 1"
+    ).bind(adDataString, auctionId).run();
 
-    return new Response(JSON.stringify({ success: true }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return json({ success: true });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { 
-      status: 500, headers: { 'Content-Type': 'application/json' } 
-    });
+    return json({ error: err.message }, 500);
   }
+}
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
