@@ -5,7 +5,8 @@ export async function onRequestGet() {
 }
 
 export async function onRequestPost({ request, env }) {
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: '2025-10-29' });
+  // Die apiVersion-Zeile wurde entfernt, um den Fehler zu beheben.
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY);
   const url = new URL(request.url);
 
   // 1. WEBHOOK (wird aufgerufen, wenn jemand bezahlt hat)
@@ -25,7 +26,7 @@ export async function onRequestPost({ request, env }) {
       const auction = await env.DB.prepare("SELECT winner_paid FROM auctions WHERE id = ?").bind(auctionId).first();
       
       if (auction?.winner_paid !== 1) {
-        const activeUntil = Math.floor(Date.now() / 1000) + 86400; // 24 Stunden (86400 Sekunden) Werbezeit
+        const activeUntil = Math.floor(Date.now() / 1000) + 86400; // 24 Stunden
         await env.DB.prepare("UPDATE auctions SET status = 'paid', winner_paid = 1, ad_active_until = ? WHERE id = ?").bind(activeUntil, auctionId).run();
       }
     }
