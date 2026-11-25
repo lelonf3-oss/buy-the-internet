@@ -8,9 +8,10 @@ export async function onRequestPost({ request, env }) {
       return json({ error: "Missing payment session ID." }, 400);
     }
 
-    const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: '2025-10-29' });
-
-    // 1. Prüfe bei Stripe, ob diese Session wirklich bezahlt wurde!
+    // Die apiVersion-Zeile wurde entfernt.
+    const stripe = new Stripe(env.STRIPE_SECRET_KEY);
+    
+    // Prüfen, ob die Zahlung wirklich erfolgreich war
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
     if (session.payment_status !== 'paid') {
@@ -18,9 +19,9 @@ export async function onRequestPost({ request, env }) {
     }
 
     const auctionId = session.metadata.auctionId;
-
-    // 2. Speichere die Werbedaten für GENAU diese Auktion
     const adDataString = JSON.stringify(adData);
+
+    // Werbedaten speichern (nur wenn auch bezahlt wurde)
     await env.DB.prepare(
       "UPDATE auctions SET ad_data = ? WHERE id = ? AND winner_paid = 1"
     ).bind(adDataString, auctionId).run();
