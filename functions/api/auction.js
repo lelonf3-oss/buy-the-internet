@@ -10,7 +10,14 @@ export async function onRequestGet({ env }) {
     return json({ activeAd: JSON.parse(activeAd.ad_data) });
   }
 
-  // 2. Auktion laden (entweder 'active' oder 'ended')
+  // 2. Echte vergangene Gewinner holen (für die "Recent Winners" Sektion)
+  const pastWinners = await env.DB.prepare(
+    "SELECT ad_data FROM auctions WHERE status = 'completed' AND ad_data IS NOT NULL ORDER BY id DESC LIMIT 3"
+  ).all();
+
+  const winnersList = pastWinners.results.map(w => JSON.parse(w.ad_data));
+
+  // 3. Auktion laden (entweder 'active' oder 'ended')
   const auction = await env.DB.prepare(
     "SELECT * FROM auctions WHERE status IN ('active', 'ended') ORDER BY id DESC LIMIT 1"
   ).first();
@@ -34,7 +41,8 @@ export async function onRequestGet({ env }) {
       auctionStatus: 'ended',
       auctionId: auction.id,
       highestBid: highest || null,
-      winnerEmail: highest ? highest.email : null
+      winnerEmail: highest ? highest.email : null,
+      recentWinners: winnersList
     });
   }
 
@@ -50,6 +58,7 @@ export async function onRequestGet({ env }) {
     highestBid: highest || null,
     nextMinBid: minNext,
     recentBids: bids.results,
+    recentWinners: winnersList
   });
 }
 
