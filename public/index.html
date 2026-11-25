@@ -14,7 +14,7 @@
       --border: #222222;
       --text: #ffffff;
       --muted: #888888;
-      --accent: #ccff00; /* Knalliges Neon-Grün */
+      --accent: #ccff00;
       --accent-text: #000000;
       --font: 'Inter', sans-serif;
       --mono: 'JetBrains Mono', monospace;
@@ -22,7 +22,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: var(--bg); color: var(--text); font-family: var(--font); -webkit-font-smoothing: antialiased; line-height: 1.4; }
     
-    /* Layout */
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
     header { padding: 32px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
     .logo { font-size: 20px; font-weight: 900; letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px; }
@@ -31,13 +30,11 @@
     .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-    /* Hero */
     .hero { padding: 80px 0; text-align: center; border-bottom: 1px solid var(--border); }
     h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 24px; }
     h1 span { display: block; }
     .subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--muted); max-width: 600px; margin: 0 auto; }
 
-    /* Main Grid */
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
     .box { background: var(--bg); padding: 48px; display: flex; flex-direction: column; justify-content: center; }
     .label { font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
@@ -45,7 +42,6 @@
     .value.mono { font-family: var(--mono); font-weight: 600; }
     .value.accent { color: var(--accent); }
     
-    /* Bid Form */
     .bid-section { padding: 48px; border-bottom: 1px solid var(--border); text-align: center; }
     .bid-form { display: flex; gap: 16px; max-width: 600px; margin: 24px auto 0; }
     .bid-form input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 20px; color: white; font-family: var(--mono); font-size: 16px; outline: none; transition: border 0.2s; }
@@ -56,7 +52,6 @@
     .feedback.error { color: #ff4444; }
     .feedback.success { color: var(--accent); }
 
-    /* Feed */
     .feed-section { padding: 48px; }
     .feed-list { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
     .feed-item { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
@@ -81,18 +76,15 @@
     </header>
   </div>
 
-  <!-- DIESER BEREICH WIRD BEI GEWINN DURCH WERBUNG ERSETZT -->
   <div id="auctionView">
     <div class="hero container">
       <h1><span>BUY THE</span><span>INTERNET<span style="color: var(--accent)">.</span></span></h1>
       <p class="subtitle">The highest bidder takes over this entire homepage for a full day. When the clock hits zero, it's gone.</p>
       
-      <!-- NEU: VIEW COUNTER -->
       <div style="margin-top: 32px; font-family: var(--mono); font-size: 14px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.05em;">
         <div class="status-dot" style="width: 6px; height: 6px; animation: none;"></div>
         <span id="viewCounter">2.000</span> Views
       </div>
-
     </div>
 
     <div class="container">
@@ -108,6 +100,12 @@
           <div class="value mono" id="countdown">00:00:00</div>
           <div class="label" style="margin-top: 24px;">Minimum Next Bid</div>
           <div class="value" id="nextMinBid" style="font-size: 2rem;">€0.00</div>
+          
+          <!-- NEU: Bezahl-Button (wird nur angezeigt, wenn Auktion beendet) -->
+          <div id="paymentBox" style="display: none; margin-top: 20px;">
+              <div class="label">Auction Ended!</div>
+              <button onclick="payNow()" style="background: var(--accent); color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; margin-top: 10px; text-transform: uppercase;">Pay Now to claim your Ad</button>
+          </div>
         </div>
       </div>
 
@@ -140,6 +138,8 @@
     };
 
     let countdownInterval = null;
+    let currentAuctionData = null;
+
     function renderCountdown(endTime) {
       if (countdownInterval) clearInterval(countdownInterval);
       const el = $('countdown');
@@ -155,24 +155,20 @@
       countdownInterval = setInterval(tick, 1000);
     }
 
-    // NEU: Funktion für den View Counter
     async function updateViewCounter() {
       try {
         const hasCounted = sessionStorage.getItem('hasCountedView');
         let res;
 
         if (!hasCounted) {
-          // Neuer Besuch in dieser Session: Zähle hoch (POST)
           res = await fetch('/api/stats', { method: 'POST' });
           sessionStorage.setItem('hasCountedView', 'true');
         } else {
-          // Bereits gezählt: Nur abrufen (GET)
           res = await fetch('/api/stats');
         }
 
         if (res.ok) {
           const data = await res.json();
-          // data.totalPageViews beinhaltet bereits die 2000 Fake-Views aus der stats.js
           $('viewCounter').textContent = new Intl.NumberFormat('de-DE').format(data.totalPageViews || 2000);
         }
       } catch (e) {
@@ -185,8 +181,9 @@
         const res = await fetch('/api/auction');
         if (!res.ok) return;
         const data = await res.json();
+        currentAuctionData = data;
 
-        // WERBUNG ANZEIGEN (Wenn Gewinner bezahlt hat)
+        // WERBUNG ANZEIGEN
         if (data.activeAd) {
           const ad = data.activeAd;
           document.getElementById('auctionView').innerHTML = `
@@ -203,7 +200,21 @@
           return;
         }
 
-        // AUKTION ANZEIGEN
+        // WENN AUKTION BEENDET IST UND AUF ZAHLUNG WARTET
+        if (data.auctionStatus === 'ended') {
+          $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : '—';
+          $('highestBidder').textContent = data.winnerEmail ? maskEmail(data.winnerEmail) : '—';
+          $('countdown').textContent = 'ENDED';
+          $('paymentBox').style.display = 'block';
+          $('nextMinBid').textContent = '—';
+          $('bidForm').style.display = 'none'; // Bieten verstecken
+          if (countdownInterval) clearInterval(countdownInterval);
+          return;
+        }
+
+        // NORMALE AKTIVE AUKTION
+        $('paymentBox').style.display = 'none';
+        $('bidForm').style.display = 'flex';
         $('highestBid').textContent = data.highestBid ? fmt(data.highestBid.amount) : fmt(0);
         $('highestBidder').textContent = data.highestBid ? maskEmail(data.highestBid.email) : '—';
         $('nextMinBid').textContent = fmt(data.nextMinBid);
@@ -220,6 +231,31 @@
             </div>`).join('');
         }
       } catch (e) { console.error(e); }
+    }
+
+    // NEU: Funktion, um die Stripe-Kasse aufzurufen
+    async function payNow() {
+      if (!currentAuctionData || !currentAuctionData.highestBid) return;
+      
+      try {
+        const res = await fetch('/api/stripe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            auctionId: currentAuctionData.auctionId, 
+            amount: currentAuctionData.highestBid.amount, 
+            email: currentAuctionData.winnerEmail 
+          }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url; // Leitet zur Stripe-Kasse weiter
+        } else {
+          alert("Error creating payment link: " + data.error);
+        }
+      } catch(e) {
+        alert("Network error.");
+      }
     }
 
     $('bidForm').addEventListener('submit', async (ev) => {
@@ -256,11 +292,8 @@
       } finally { btn.disabled = false; }
     });
 
-    // Beim Laden der Seite ausführen
     updateViewCounter();
     loadAuction();
-    
-    // Alle 15 Sekunden aktualisieren
     setInterval(loadAuction, 15000);
   </script>
 </body>
